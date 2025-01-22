@@ -1,20 +1,23 @@
 #include "../headers/main.h"
 #include "../headers/minirt.h"
 
-/*static t_data	*intialize(int ac, char **av);*/
+bool	initialize(char *filename)
+{
+	t_list	*file;
+
+	file = NULL;
+	if (!read_file(filename, &file))
+		return (false);
+	if (!parse_file(&file))
+		return (false);
+	return (true);
+}
 
 int	main(int ac, char **av)
 {
-	/*t_data	*data;*/
-
-	/*data = NULL;*/
 	if (!valid_args(ac, av))
-		exit(0);
-	else
-	 printf("debug: valid valid");
-	/*data = initialize(av);*/
-	/*if (!data)*/
-		/*ft_exit(data, NULL, INIT_ERROR, 1);*/
-	/*ft_exit(data, NULL, NULL, 1);*/
+		exit(EXIT_FAILURE);
+	if (!initialize(av[1]))
+		exit(EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

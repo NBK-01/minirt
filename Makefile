@@ -17,7 +17,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address
 
 
-SRCS = main init/init init/validation
+SRCS = main init/parse init/validation
 
 SRC = $(addprefix src/, $(addsuffix .c, $(SRCS)))
 

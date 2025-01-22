@@ -17,7 +17,9 @@ LIST_SRC	= ft_lstadd_back ft_lstclear ft_lstiter ft_lstmap ft_lstsize ft_lstadd_
 
 STDLIB_SRC	= ft_atoi ft_calloc
 
-CUSTOM_SRC	= ft_itoa ft_putendl_fd ft_putnbr_fd ft_putstr_fd ft_putchar_fd ft_split ft_strjoin ft_strtrim ft_substr ft_striteri ft_strmapi
+GNL_SRC	=  get_next_line
+
+CUSTOM_SRC	= ft_itoa ft_putendl_fd ft_putnbr_fd ft_putstr_fd ft_putchar_fd ft_split ft_strjoin ft_strtrim ft_substr ft_striteri ft_strmapi ft_open
 
 STRING_SRCS		= $(addprefix srcs/string/, $(addsuffix .c, ${STRING_SRC}))
 
@@ -29,7 +31,11 @@ CUSTOM_SRCS		= $(addprefix srcs/custom/, $(addsuffix .c, ${CUSTOM_SRC}))
 
 LIST_SRCS		= $(addprefix srcs/list/, $(addsuffix .c, ${LIST_SRC}))
 
+LIST_SRCS		= $(addprefix srcs/gnl/, $(addsuffix .c, ${GNL_SRC}))
+
 HEAD		= ./includes/libft.h
+
+GNL_OBJS		= $(addprefix objs/gnl/, $(addsuffix .o, $(GNL_SRC)))
 
 STRING_OBJS		= $(addprefix objs/string/, $(addsuffix .o, $(STRING_SRC)))
 
@@ -71,8 +77,8 @@ objs/%.o:	srcs/%.c
 	@printf "\r$(_MUP)"
 
 
-${NAME}:	${STRING_OBJS} ${CTYPE_OBJS} ${LIST_OBJS} ${CUSTOM_OBJS} ${STDLIB_OBJS}
-	@${AR} ${NAME} ${STRING_OBJS} ${CTYPE_OBJS} ${LIST_OBJS} ${CUSTOM_OBJS} ${STDLIB_OBJS}
+${NAME}:	${STRING_OBJS} ${GNL_OBJS} ${CTYPE_OBJS} ${LIST_OBJS} ${CUSTOM_OBJS} ${STDLIB_OBJS}
+	@${AR} ${NAME} ${STRING_OBJS} ${GNL_OBJS} ${CTYPE_OBJS} ${LIST_OBJS} ${CUSTOM_OBJS} ${STDLIB_OBJS}
 	@${RN} ${NAME}
 
 
