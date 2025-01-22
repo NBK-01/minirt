@@ -16,7 +16,8 @@ CC = gcc
 
 CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address
 
-SRCS = main
+
+SRCS = main init/init init/validation
 
 SRC = $(addprefix src/, $(addsuffix .c, $(SRCS)))
 
@@ -96,3 +97,4 @@ re:			fclean all
 .PHONY: 	all clean fclean re
 
 .SILENT: 	clean fclean re all
+
