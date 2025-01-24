@@ -14,10 +14,10 @@ LIB = -L ./lib/mlx -lmlx -lXext -lX11 -lm -lbsd
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -fPIE -g #-fsanitize=address
 
 
-SRCS = main init/parse init/validation
+SRCS = main init/parse init/validation utils/utils
 
 SRC = $(addprefix src/, $(addsuffix .c, $(SRCS)))
 

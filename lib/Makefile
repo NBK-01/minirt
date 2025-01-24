@@ -54,7 +54,7 @@ RM			= rm -f
 AR			= ar rc
 RN			= ranlib
 
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		= -Wall -Wextra -Werror -fPIE
 OK_COLOR    	= \033[0;32m
 _END		=	\e[0m
 _GREEN		=	\e[32m
