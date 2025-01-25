@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/24 12:31:04 by mmuhaise          #+#    #+#             */
+/*   Updated: 2025/01/24 14:55:49 by mmuhaise         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MAIN_H
 # define MAIN_H
 # include <stdio.h>
@@ -28,8 +40,92 @@
 # define BG_GREEN   "\033[42m"
 # define BG_YELLOW  "\033[43m"
 
-# define MALLOC_ERR RED "minirt: failed allocating: %s\n" RESET
-# define MLX_ERR	RED "minirt: mlx failure: %s\n" RESET
+typedef enum e_ident
+{
+	SP, //sphere	
+	PL, //plane
+	CY, //cylinder
+	L,	//light
+	C,	//camera
+	A,	//ambient lighting
+}	t_ident;
 
+/*saves space and time to store all the 
+ * object's color values as RGB*/
+typedef struct s_color
+{
+	int		r;
+	int		g;
+	int		b;
+}	t_color;
+
+/*objects come with coordinates to place them 
+ * in a given scene, t_pos stores these coordinates*/
+typedef struct s_pos
+{
+	float	x;
+	float	y;
+	float	z;
+}	t_pos;
+
+typedef struct s_ambient
+{
+	char	ident;
+	float	ratio;
+	t_color	color;
+}	t_ambient;
+
+typedef struct s_camera
+{
+	char	ident;
+	t_pos	pos;
+	t_pos	vec;
+	int		fov;
+}	t_camera;
+
+typedef struct s_light
+{
+	char	ident;
+	t_pos	pos;
+	float	ratio;
+	t_color	color;
+}	t_light;
+
+
+typedef struct s_sphere
+{
+	char	*ident;
+	t_pos	pos;
+	float	diameter;
+	t_color	color;
+}	t_sphere;
+
+typedef struct s_plane
+{
+	char	*ident;
+	t_pos	pos;
+	t_pos	vec;
+	t_color	color;
+}	t_plane;
+
+typedef struct s_cylinder
+{
+	char	*ident;
+	t_pos	pos;
+	t_pos	vec;
+	float	diameter;
+	float	height;
+	t_color	color;
+}	t_cylinder;
+
+typedef struct s_data
+{
+	t_ambient	*ambient;
+	t_camera	*camera;
+	t_light		*light;
+	t_sphere	*sphere;
+	t_plane		*plane;
+	t_cylinder	*cylinder;
+}	t_data;
 
 #endif // !MAIN_H
