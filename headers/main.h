@@ -40,6 +40,9 @@
 # define BG_GREEN   "\033[42m"
 # define BG_YELLOW  "\033[43m"
 
+# define WIDTH		800
+# define HEIGHT		600
+
 typedef enum e_ident
 {
 	SP, //sphere	
@@ -58,6 +61,13 @@ typedef struct s_color
 	int		g;
 	int		b;
 }	t_color;
+
+typedef struct s_vec
+{
+	double	x;
+	double	y;
+	double	z;
+}	t_vec;
 
 /*objects come with coordinates to place them 
  * in a given scene, t_pos stores these coordinates*/
@@ -83,6 +93,12 @@ typedef struct s_camera
 	int		fov;
 }	t_camera;
 
+typedef struct s_ray
+{
+	t_pos	origin;
+	t_pos	dir;
+}	t_ray; ;
+
 typedef struct s_light
 {
 	char	ident;
@@ -91,6 +107,12 @@ typedef struct s_light
 	t_color	color;
 }	t_light;
 
+typedef struct s_mlx {
+    void *mlx;
+    void *window;
+    void *img;
+    int *data;
+} t_mlx;
 
 typedef struct s_sphere
 {
