@@ -40,8 +40,8 @@
 # define BG_GREEN   "\033[42m"
 # define BG_YELLOW  "\033[43m"
 
-# define WIDTH		800
-# define HEIGHT		600
+# define WIDTH		1200
+# define HEIGHT		900
 
 typedef enum e_ident
 {
@@ -53,8 +53,7 @@ typedef enum e_ident
 	A,	//ambient lighting
 }	t_ident;
 
-/*saves space and time to store all the 
- * object's color values as RGB*/
+/*RGB, no more no less*/
 typedef struct s_color
 {
 	int		r;
@@ -104,7 +103,7 @@ typedef struct s_light
 	char	ident;
 	t_pos	pos;
 	float	ratio;
-	t_color	color;
+	t_color	color; // not used in mando -- will keep as white or remove. we'll find out :)
 }	t_light;
 
 typedef struct s_mlx {
@@ -140,14 +139,25 @@ typedef struct s_cylinder
 	t_color	color;
 }	t_cylinder;
 
+typedef union u_obj
+{
+	t_sphere	*sp;
+	t_plane		*pl;
+	t_cylinder	*cy;
+}	t_obj;
+
+typedef struct s_objects
+{
+	t_obj				type;
+	struct s_objects	*next;
+}	t_objects;
+
 typedef struct s_data
 {
 	t_ambient	*ambient;
 	t_camera	*camera;
 	t_light		*light;
-	t_sphere	*sphere;
-	t_plane		*plane;
-	t_cylinder	*cylinder;
+	t_objects	*objs;
 }	t_data;
 
 #endif // !MAIN_H
