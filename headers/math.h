@@ -15,6 +15,16 @@ typedef enum  e_op
 	CROSS,
 }	t_op;
 
+typedef struct s_quad
+{
+	double a;
+	double b;
+	double c;
+	double d;
+	double x1;
+	double x2;
+}	t_quad;
+
 typedef union u_result {
     double d;
     t_pos v;

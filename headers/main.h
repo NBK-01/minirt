@@ -92,11 +92,9 @@ typedef struct s_camera
 	int		fov;
 }	t_camera;
 
-typedef struct s_ray
-{
-	t_pos	origin;
-	t_pos	dir;
-}	t_ray; ;
+
+
+
 
 typedef struct s_light
 {
@@ -121,6 +119,11 @@ typedef struct s_sphere
 	t_color	color;
 }	t_sphere;
 
+union u_figures
+{
+	t_sphere	sp;
+};
+
 typedef struct s_plane
 {
 	char	*ident;
@@ -128,6 +131,26 @@ typedef struct s_plane
 	t_pos	vec;
 	t_color	color;
 }	t_plane;
+
+typedef struct s_inter
+{
+	int				i;
+	enum e_ident	type;
+	t_sphere		sp;
+	t_plane			pl;
+	double			dist;
+	t_pos			point;
+	t_pos			normal;
+	t_color			c;
+}	t_inter;
+
+typedef struct s_ray
+{
+	t_pos	origin;
+	t_pos	dir;
+	t_inter	*inter;
+}	t_ray; ;
+
 
 typedef struct s_cylinder
 {
@@ -139,25 +162,16 @@ typedef struct s_cylinder
 	t_color	color;
 }	t_cylinder;
 
-typedef union u_obj
-{
-	t_sphere	*sp;
-	t_plane		*pl;
-	t_cylinder	*cy;
-}	t_obj;
-
-typedef struct s_objects
-{
-	t_obj				type;
-	struct s_objects	*next;
-}	t_objects;
 
 typedef struct s_data
 {
 	t_ambient	*ambient;
 	t_camera	*camera;
 	t_light		*light;
-	t_objects	*objs;
+	t_sphere	**sphere;
+	t_plane		*plane;
+	t_cylinder	*cylinder;
+	t_mlx		*mlx;
 }	t_data;
 
 #endif // !MAIN_H
