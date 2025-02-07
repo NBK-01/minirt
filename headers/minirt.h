@@ -15,7 +15,7 @@
 
 #include "main.h"
 
-void	launch_rays(t_data *rt);
+void	render_scene(t_data *data);
 bool	valid_args(int ac, char **av);
 int		read_file(char *filename, t_list **file);
 bool	parse_file(t_list **file, t_data *data);

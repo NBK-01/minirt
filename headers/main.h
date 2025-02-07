@@ -92,10 +92,6 @@ typedef struct s_camera
 	int		fov;
 }	t_camera;
 
-
-
-
-
 typedef struct s_light
 {
 	char	ident;
@@ -109,6 +105,9 @@ typedef struct s_mlx {
     void *window;
     void *img;
     int *data;
+	int	bpp;
+	int	size_line;
+	int	endian;
 } t_mlx;
 
 typedef struct s_sphere
@@ -118,11 +117,6 @@ typedef struct s_sphere
 	float	diameter;
 	t_color	color;
 }	t_sphere;
-
-union u_figures
-{
-	t_sphere	sp;
-};
 
 typedef struct s_plane
 {
@@ -148,7 +142,7 @@ typedef struct s_ray
 {
 	t_pos	origin;
 	t_pos	dir;
-	t_inter	*inter;
+	/*t_inter	*inter;*/
 }	t_ray; ;
 
 
@@ -168,7 +162,7 @@ typedef struct s_data
 	t_ambient	*ambient;
 	t_camera	*camera;
 	t_light		*light;
-	t_sphere	**sphere;
+	t_sphere	*sphere;
 	t_plane		*plane;
 	t_cylinder	*cylinder;
 	t_mlx		*mlx;

@@ -8,7 +8,6 @@ bool	intersection(t_ray ray, t_data *data, double *t, t_ident id)
 {
 	if (id == SP)
 		return (0);
-		/*return (sphere(ray, (*data->sphere), t));*/
 	else if (id == PL)
 		return (0); //later later
 	else if (id == CY)

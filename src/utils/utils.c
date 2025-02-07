@@ -137,7 +137,7 @@ void	print_data(t_data *data)
 	print_ambient(data->ambient);
 	print_camera(data->camera);
 	print_light(data->light);
-	print_sphere(data->sphere[0]);
+	/*print_sphere(data->sphere[0]);*/
 	/*print_plane(data->plane);*/
 	/*print_cylinder(data->cylinder);*/
 }

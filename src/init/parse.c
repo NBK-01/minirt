@@ -89,11 +89,10 @@ void	parse_plane(char **split, t_data *data)
 	plane->pos = parse_pos(split[1]);
 	plane->vec = parse_pos(split[2]);
 	plane->color = parse_color(split[3]);
-	(void)data;
-	/*data->plane = plane;*/
+	data->plane = plane;
 }
 
-void	parse_sphere(char **split, t_data *obj, int *i)
+void	parse_sphere(char **split, t_data *data)
 {
 	t_sphere	*sphere;
 
@@ -102,8 +101,7 @@ void	parse_sphere(char **split, t_data *obj, int *i)
 	sphere->pos = parse_pos(split[1]);
 	sphere->diameter = ft_atof(split[2]);
 	sphere->color = parse_color(split[3]);
-	obj->sphere[*i] = sphere;
-	*i += 1;
+	data->sphere = sphere;
 }
 
 void	parse_cylinder(char **split, t_data *data)
@@ -117,11 +115,10 @@ void	parse_cylinder(char **split, t_data *data)
 	cyl->diameter = ft_atof(split[3]);
 	cyl->height = ft_atof(split[4]);
 	cyl->color = parse_color(split[5]);
-	(void)data;
-	/*data->cylinder = cyl;*/
+	data->cylinder = cyl;
 }
 
-void	parse_line(char **split, t_data *data, int *i)
+void	parse_line(char **split, t_data *data)
 {
 	if (!ft_strcmp(split[0], "A"))
 		parse_ambient(split, data);
@@ -130,7 +127,7 @@ void	parse_line(char **split, t_data *data, int *i)
 	if (!ft_strcmp(split[0], "L"))
 		parse_light(split, data);
 	if (!ft_strcmp(split[0], "sp"))
-		parse_sphere(split, data, i);
+		parse_sphere(split, data);
 	if (!ft_strcmp(split[0], "pl"))
 		parse_plane(split, data);
 	if (!ft_strcmp(split[0], "cy"))
@@ -163,38 +160,73 @@ int	read_file(char *filename, t_list **file)
 	return (1);
 }
 
+t_mlx *init_mlx()
+{
+    t_mlx *mlx_data;
+
+    // Initialize mlx structure
+    mlx_data = (t_mlx *)malloc(sizeof(t_mlx));
+    if (!mlx_data)
+        return NULL;
+
+    // Initialize mlx
+    mlx_data->mlx = mlx_init();
+    if (!mlx_data->mlx)
+    {
+        free(mlx_data);
+        return NULL;
+    }
+
+    // Create a window
+    mlx_data->window = mlx_new_window(mlx_data->mlx, WIDTH, HEIGHT, "MiniRT - Raytracer");
+    if (!mlx_data->window)
+    {
+        free(mlx_data);
+        return NULL;
+    }
+
+    // Create an image buffer for pixel manipulation
+    mlx_data->img = mlx_new_image(mlx_data->mlx, WIDTH, HEIGHT);
+    if (!mlx_data->img)
+    {
+        free(mlx_data);
+        return NULL;
+    }
+
+    mlx_data->data = (int *)mlx_get_data_addr(mlx_data->img, &(int){32}, &(int){WIDTH * 4}, &(int){0});
+    return mlx_data;
+}
+
+
 bool	parse_file(t_list **file, t_data *data)
 {
 	t_list	*tmp;
 	char	**split;
-	int		i;
 
 	tmp = (*file);
-	i = 0;
-	data->sphere = malloc(sizeof(t_sphere) * 100);
-	while (i < 100)
-	{
-		data->sphere[i] = NULL;
-		i++;
-	}
-	i = 0;
 	while (tmp)
 	{
 		split = ft_split(tmp->content, " \t");
 		if (!split)
 			return (ft_putstr_fd(RED "Error: failed to split line\n" RESET, 2), false);
-		parse_line(split, data, &i);  // Assuming parse_line updates data->objs
+		parse_line(split, data);  // Assuming parse_line updates data->objs
 		tmp = tmp->next;
 	}
-	/*remvoe later*/
-	t_mlx mlx;
-	mlx.mlx = mlx_init();
-	mlx.window = mlx_new_window(mlx.mlx, WIDTH, HEIGHT, "MiniRT Ray Tracing");
-	mlx.img = mlx_new_image(mlx.mlx, WIDTH, HEIGHT);
-	mlx.data = (int *)mlx_get_data_addr(mlx.img, &(int){32}, &(int){WIDTH * 4}, &(int){0});
-	data->mlx = &mlx;
-	print_data(data);
-	launch_rays(data);
-	mlx_loop(mlx.mlx);
+
+    // Start the main loop to render the scene continuously
+	data->mlx = malloc(sizeof(t_mlx));
+
+    // Enter the mlx event loop
+	data->mlx->mlx = mlx_init();
+    data->mlx->window = mlx_new_window(data->mlx->mlx, WIDTH, HEIGHT, "miniRT");
+    data->mlx->img = mlx_new_image(data->mlx->mlx, WIDTH, HEIGHT);
+    data->mlx->data = (int *)mlx_get_data_addr(data->mlx->img, &data->mlx->bpp, &data->mlx->size_line, &data->mlx->endian);
+
+    render_scene(data);
+
+    mlx_put_image_to_window(data->mlx->mlx, data->mlx->window, data->mlx->img, 0, 0);
+    mlx_loop(data->mlx->mlx);
 	return (true);
 }
+
+
