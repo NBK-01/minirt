@@ -160,44 +160,6 @@ int	read_file(char *filename, t_list **file)
 	return (1);
 }
 
-t_mlx *init_mlx()
-{
-    t_mlx *mlx_data;
-
-    // Initialize mlx structure
-    mlx_data = (t_mlx *)malloc(sizeof(t_mlx));
-    if (!mlx_data)
-        return NULL;
-
-    // Initialize mlx
-    mlx_data->mlx = mlx_init();
-    if (!mlx_data->mlx)
-    {
-        free(mlx_data);
-        return NULL;
-    }
-
-    // Create a window
-    mlx_data->window = mlx_new_window(mlx_data->mlx, WIDTH, HEIGHT, "MiniRT - Raytracer");
-    if (!mlx_data->window)
-    {
-        free(mlx_data);
-        return NULL;
-    }
-
-    // Create an image buffer for pixel manipulation
-    mlx_data->img = mlx_new_image(mlx_data->mlx, WIDTH, HEIGHT);
-    if (!mlx_data->img)
-    {
-        free(mlx_data);
-        return NULL;
-    }
-
-    mlx_data->data = (int *)mlx_get_data_addr(mlx_data->img, &(int){32}, &(int){WIDTH * 4}, &(int){0});
-    return mlx_data;
-}
-
-
 bool	parse_file(t_list **file, t_data *data)
 {
 	t_list	*tmp;
@@ -209,14 +171,12 @@ bool	parse_file(t_list **file, t_data *data)
 		split = ft_split(tmp->content, " \t");
 		if (!split)
 			return (ft_putstr_fd(RED "Error: failed to split line\n" RESET, 2), false);
-		parse_line(split, data);  // Assuming parse_line updates data->objs
+		parse_line(split, data);
 		tmp = tmp->next;
 	}
 
-    // Start the main loop to render the scene continuously
 	data->mlx = malloc(sizeof(t_mlx));
 
-    // Enter the mlx event loop
 	data->mlx->mlx = mlx_init();
     data->mlx->window = mlx_new_window(data->mlx->mlx, WIDTH, HEIGHT, "miniRT");
     data->mlx->img = mlx_new_image(data->mlx->mlx, WIDTH, HEIGHT);

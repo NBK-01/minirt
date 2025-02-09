@@ -40,8 +40,12 @@
 # define BG_GREEN   "\033[42m"
 # define BG_YELLOW  "\033[43m"
 
-# define WIDTH		1200
-# define HEIGHT		900
+# define WIDTH		1280
+# define HEIGHT		700
+# define AMBIENT 0.2
+# define EPSILON 1e-4
+
+
 
 typedef enum e_ident
 {
@@ -155,6 +159,15 @@ typedef struct s_cylinder
 	float	height;
 	t_color	color;
 }	t_cylinder;
+
+
+typedef struct s_hit {
+    double t;
+    t_pos point;
+    t_pos normal;
+    t_color color;
+	double reflectivity;
+} t_hit;
 
 
 typedef struct s_data

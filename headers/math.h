@@ -20,9 +20,8 @@ typedef struct s_quad
 	double a;
 	double b;
 	double c;
-	double d;
-	double x1;
-	double x2;
+	double rad;
+	t_pos oc;
 }	t_quad;
 
 typedef union u_result {
@@ -34,6 +33,7 @@ typedef union u_result {
  * apply it to a vector and a scalar -> a scalar op on vectors 
  * applies the scalar and op on each component of the vector.*/
 t_pos	vec_scalar(t_pos vec, float scalar, t_op op);
+double	quadratic(double a, double d, double c);
 
 ////// -------------- DOT PRODUCT -------------- ////////
 /*calculates the dot producty of two vectors, vec1 and vec2
