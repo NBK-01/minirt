@@ -6,7 +6,7 @@
 /*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 11:48:34 by mmuhaise          #+#    #+#             */
-/*   Updated: 2025/02/05 14:50:16 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:25:48 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,10 +282,10 @@ bool	validate_cylinder(char **split)
 			return (false);
 		double diameter = ft_atof(split[3]);
 		if (!is_valid_double(split[3]) || diameter < 0)
-			return (ft_putstr_fd(RED "Error: invalid plane diameter\n" RESET, 2), false);
+			return (ft_putstr_fd(RED "Error: invalid cylinder diameter\n" RESET, 2), false);
 		double height = ft_atof(split[4]);
 		if (!is_valid_double(split[4]) || height < 0)
-			return (ft_putstr_fd(RED "Error: invalid plane height\n" RESET, 2), false);
+			return (ft_putstr_fd(RED "Error: invalid cylinder height\n" RESET, 2), false);
 		if (!check_rgb(split[5]))
 			return (false);
 	}
@@ -298,7 +298,9 @@ bool	validate_file(t_list **file)
 {
 	t_list	*tmp;
 	char	**split;
-	bool	has_required_identifier = false;
+	bool	has_ambient = false;
+	bool	has_camera = false;
+	bool	has_light = false;
 
 	tmp = (*file);
 	while (tmp)
@@ -310,19 +312,21 @@ bool	validate_file(t_list **file)
 				|| !ft_strcmp(split[0], "L") || !ft_strcmp(split[0], "A\n")
 				|| !ft_strcmp(split[0], "C\n") || !ft_strcmp(split[0], "L\n")))
 		{
-			has_required_identifier = true;
 			if (!ft_strcmp(split[0], "A") || !ft_strcmp(split[0], "A\n"))
 			{
+				has_ambient = true;
 				if (!validate_ambient(split))
 					return (false);
 			}
 			if (!ft_strcmp(split[0], "C") || !ft_strcmp(split[0], "C\n"))
 			{
+				has_camera = true;
 				if (!validate_camera(split))
 					return false;
 			}
 			if (!ft_strcmp(split[0], "L") || !ft_strcmp(split[0], "L\n"))
 			{
+				has_light = true;
 				if (!validate_light(split))
 					return (false);
 			}
@@ -345,8 +349,8 @@ bool	validate_file(t_list **file)
 		free(split);
 		tmp = tmp->next;
 	}
-	if (!has_required_identifier)
-		return (ft_putstr_fd(RED "Error: file must contain at least one of 'A', 'C', or 'L'\n" RESET, 2), false);
+	if (!has_ambient || !has_camera || !has_light)
+		return (ft_putstr_fd(RED "Error: file must contain 'A', 'C', and 'L'\n" RESET, 2), false);
 	return (true);
 }
 
