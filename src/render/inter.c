@@ -9,9 +9,9 @@ static bool	intersect_plane(t_ray ray, t_plane plane, t_hit *hit);
 bool	intersection(t_ray ray, t_data *data, t_hit *hit, t_ident id)
 {
 	if (id == SP)
-		return (intersect_sphere(ray, *data->sphere, hit));
+		return (intersect_sphere(ray, *data->objects->spheres[0], hit)); // TO REVISE
 	else if (id == PL)
-		return (intersect_plane(ray, *data->plane, hit));
+		return (intersect_plane(ray, *data->objects->planes[0], hit)); // TO REVISE
 	else if (id == CY)
 		return (0); //later later
 	else

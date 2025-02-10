@@ -6,7 +6,7 @@
 /*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:31:04 by mmuhaise          #+#    #+#             */
-/*   Updated: 2025/02/01 15:39:14 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:41:41 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,15 +169,27 @@ typedef struct s_hit {
 	double reflectivity;
 } t_hit;
 
+typedef struct s_objects
+{
+	t_sphere	**spheres;
+	t_plane		**planes;
+	t_cylinder	**cylinders;
+}	t_objects;
+
 
 typedef struct s_data
 {
 	t_ambient	*ambient;
 	t_camera	*camera;
 	t_light		*light;
-	t_sphere	*sphere;
-	t_plane		*plane;
-	t_cylinder	*cylinder;
+	// t_sphere	*sphere;
+	// t_plane		*plane;
+	// t_cylinder	*cylinder;
+	t_objects	*objects;
+	int			objs_count;
+	int			spheres_count;
+	int			planes_count;
+	int			cylinders_count;
 	t_mlx		*mlx;
 }	t_data;
 

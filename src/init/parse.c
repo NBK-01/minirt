@@ -6,7 +6,7 @@
 /*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:30:56 by mmuhaise          #+#    #+#             */
-/*   Updated: 2025/01/24 14:58:29 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2025/02/10 14:08:51 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,9 @@ void	parse_plane(char **split, t_data *data)
 	plane->pos = parse_pos(split[1]);
 	plane->vec = parse_pos(split[2]);
 	plane->color = parse_color(split[3]);
-	data->plane = plane;
+	data->objects->planes[data->planes_count] = plane;
+	data->planes_count++;
+	data->objs_count++;
 }
 
 void	parse_sphere(char **split, t_data *data)
@@ -101,7 +103,9 @@ void	parse_sphere(char **split, t_data *data)
 	sphere->pos = parse_pos(split[1]);
 	sphere->diameter = ft_atof(split[2]);
 	sphere->color = parse_color(split[3]);
-	data->sphere = sphere;
+	data->objects->spheres[data->spheres_count] = sphere;
+	data->spheres_count++;
+	data->objs_count++;
 }
 
 void	parse_cylinder(char **split, t_data *data)
@@ -115,7 +119,9 @@ void	parse_cylinder(char **split, t_data *data)
 	cyl->diameter = ft_atof(split[3]);
 	cyl->height = ft_atof(split[4]);
 	cyl->color = parse_color(split[5]);
-	data->cylinder = cyl;
+	data->objects->cylinders[data->cylinders_count] = cyl;
+	data->cylinders_count++;
+	data->objs_count++;
 }
 
 void	parse_line(char **split, t_data *data)
@@ -160,12 +166,30 @@ int	read_file(char *filename, t_list **file)
 	return (1);
 }
 
+void	init_data(t_data *data)
+{
+	data->objs_count = 0;
+	data->planes_count = 0;
+	data->spheres_count = 0;
+	data->cylinders_count = 0;
+	data->objects = malloc(sizeof(t_objects));
+	if (!data->objects)
+	{
+		ft_putstr_fd(RED "Error: failed to malloc objects\n" RESET, 2);
+		return ;
+	}
+}
+
 bool	parse_file(t_list **file, t_data *data)
 {
 	t_list	*tmp;
 	char	**split;
 
 	tmp = (*file);
+	init_data(data);
+	data->objects->spheres = ft_calloc(100, sizeof(t_sphere *));
+	data->objects->planes = ft_calloc(100, sizeof(t_plane *));
+	data->objects->cylinders = ft_calloc(100, sizeof(t_plane *));
 	while (tmp)
 	{
 		split = ft_split(tmp->content, " \t");
