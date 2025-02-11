@@ -6,12 +6,12 @@
 static bool	intersect_sphere(t_ray ray, t_sphere sphere, t_hit *hit);
 static bool	intersect_plane(t_ray ray, t_plane plane, t_hit *hit);
 
-bool	intersection(t_ray ray, t_data *data, t_hit *hit, t_ident id)
+bool	intersection(t_ray ray, t_data *data, t_hit *hit, t_ident id, int i)
 {
 	if (id == SP)
-		return (intersect_sphere(ray, *data->objects->spheres[0], hit)); // TO REVISE
+		return (intersect_sphere(ray, *data->objects->spheres[i], hit)); // TO REVISE
 	else if (id == PL)
-		return (intersect_plane(ray, *data->objects->planes[0], hit)); // TO REVISE
+		return (intersect_plane(ray, *data->objects->planes[i], hit)); // TO REVISE
 	else if (id == CY)
 		return (0); //later later
 	else
@@ -21,7 +21,7 @@ bool	intersection(t_ray ray, t_data *data, t_hit *hit, t_ident id)
 static bool	intersect_plane(t_ray ray, t_plane plane, t_hit *hit)
 {
 	double	denom;
-    t_pos diff;
+    t_pos	diff;
 
 
     denom = vec_dot_cross(plane.vec, ray.dir, DOT).d;
@@ -62,17 +62,25 @@ int find_closest_intersection(t_ray ray, t_data *data, t_hit *closest_hit)
     t_hit temp_hit;
     closest_hit->t = INFINITY;
     int hit_anything = 0;
+	int i = -1;
 
-    if (intersection(ray, data, &temp_hit, SP) && temp_hit.t < closest_hit->t)
-    {
-        *closest_hit = temp_hit;
-        hit_anything = 1;
-    }
-    if (intersection(ray, data, &temp_hit, PL) && temp_hit.t < closest_hit->t)
-    {
-        *closest_hit = temp_hit;
-        hit_anything = 1;
-    }
-    return hit_anything;
+	while (++i < data->spheres_count)
+	{
+		if (intersection(ray, data, &temp_hit, SP, i) && temp_hit.t < closest_hit->t)
+		{
+			*closest_hit = temp_hit;
+			hit_anything = 1;
+		}
+	}
+	i = -1;
+	while (++i < data->planes_count)
+	{
+		if (intersection(ray, data, &temp_hit, PL, i) && temp_hit.t < closest_hit->t)
+		{
+			*closest_hit = temp_hit;
+			hit_anything = 1;
+		}
+	}
+    return (hit_anything);
 }
 

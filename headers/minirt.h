@@ -27,7 +27,7 @@ void	print_plane(t_plane *plane);
 void	print_cylinder(t_cylinder *cylinder);
 void	print_data(t_data *data);
 double	ft_atof(const char *str);
-bool	intersection(t_ray ray, t_data *data, t_hit *hit, t_ident id);
+bool	intersection(t_ray ray, t_data *data, t_hit *hit, t_ident id, int i);
 t_pos calculate_ray_direction(int x, int y, t_camera *camera, double aspect_ratio);
 t_ray	generate_ray(t_camera *cam, int x, int y);
 t_color	set_color(t_hit hit, t_data *data);

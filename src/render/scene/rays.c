@@ -3,7 +3,6 @@
 #include "../../../headers/main.h"
 #include "../../../headers/minirt.h"
 
-
 t_pos calculate_ray_direction(int x, int y, t_camera *camera, double aspect_ratio)
 {
     double px = (2 * ((x + 0.5) / (double)WIDTH) - 1) * tan(camera->fov * 0.5 * M_PI / 180) * aspect_ratio;
