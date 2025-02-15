@@ -6,7 +6,7 @@
 /*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:30:56 by mmuhaise          #+#    #+#             */
-/*   Updated: 2025/02/10 14:08:51 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2025/02/15 08:57:17 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,9 +196,9 @@ bool	parse_file(t_list **file, t_data *data)
 		if (!split)
 			return (ft_putstr_fd(RED "Error: failed to split line\n" RESET, 2), false);
 		parse_line(split, data);
+		free_split(split);
 		tmp = tmp->next;
 	}
-
 	data->mlx = malloc(sizeof(t_mlx));
 
 	data->mlx->mlx = mlx_init();

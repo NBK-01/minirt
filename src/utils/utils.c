@@ -6,7 +6,7 @@
 /*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 14:08:54 by mmuhaise          #+#    #+#             */
-/*   Updated: 2025/01/24 14:58:53 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2025/02/15 00:14:44 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,21 @@ double	ft_atof(const char *str)
 		str++;
 	}
 	return (sign * (result + fraction / divisor));
+}
+
+void	free_split(char **split)
+{
+	int	i;
+
+	if (!split)
+		return ;
+	i = 0;
+	while (split[i])
+	{
+		free(split[i]);
+		i++;
+	}
+	free(split);
 }
 
 void	print_ambient(t_ambient *ambient)

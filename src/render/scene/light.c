@@ -25,15 +25,12 @@ double compute_lighting(t_hit hit, t_light light, t_data *data)
     };
 
     t_hit shadow_hit;
-	printf("%s\n", "HELLO");
     if (find_closest_intersection(shadow_ray, data, &shadow_hit))
     {
         // Check if the intersection is between the hit point and the light source (in shadow)
         double light_distance = vec_length(vec_operation(light.pos, hit.point, SUB));
-		printf("%s\n", "HELLOOOO");
         if (shadow_hit.t < light_distance && shadow_hit.t > EPSILON) // The hit is between the point and the light
         {
-			printf("Hello\n");
             return intensity * 0.3; // Reduce light intensity for shadows (darken the point)
         }
     }
