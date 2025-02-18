@@ -15,6 +15,9 @@
 
 #include "main.h"
 
+bool	intersect_sphere(t_ray ray, t_sphere sphere, t_hit *hit);
+bool	intersect_plane(t_ray ray, t_plane plane, t_hit *hit);
+bool intersect_cylinder(t_ray ray, t_cylinder cy, t_hit *hit);
 void	render_scene(t_data *data);
 bool	valid_args(int ac, char **av);
 int		read_file(char *filename, t_list **file);
@@ -31,7 +34,7 @@ bool	intersection(t_ray ray, t_data *data, t_hit *hit, t_ident id, int i);
 t_pos	calculate_ray_direction(int x, int y, t_camera *camera, double aspect_ratio);
 t_ray	generate_ray(t_camera *cam, int x, int y);
 t_color	set_color(t_hit hit, t_data *data);
-double	compute_lighting(t_hit hit, t_light light, t_data *data);
+t_color compute_lighting(t_data *data, t_hit *hit, t_ray *ray);
 int		find_closest_intersection(t_ray ray, t_data *data, t_hit *closest_hit);
 bool	is_valid_int(const char *str);
 bool	is_valid_double(const char *str);

@@ -30,4 +30,3 @@ t_ray	generate_ray(t_camera *cam, int x, int y)
 	return (ray);
 }
 
-

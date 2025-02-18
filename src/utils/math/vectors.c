@@ -46,7 +46,7 @@ t_pos	vec_normalize(t_pos vec)
 
 t_pos	vec_operation(t_pos vec1, t_pos vec2, t_op op)
 {
-	t_pos	result;
+	t_pos	result = {0,0,0};
 
 	if (op == ADD)
 	{

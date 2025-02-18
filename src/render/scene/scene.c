@@ -19,7 +19,7 @@ void render_scene(t_data *data)
 			ray = generate_ray(data->camera, x, y);
             if (find_closest_intersection(ray, data, &closest_hit))
             {
-				color = set_color(closest_hit, data);
+				color = compute_lighting(data, &closest_hit, &ray);
                 data->mlx->data[y * WIDTH + x] = (color.r << 16) | (color.g << 8) | color.b;
             }
             else

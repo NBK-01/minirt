@@ -12,7 +12,7 @@ INC = -I ./lib/mlx
 
 LIB = -L ./lib/mlx -lmlx -lXext -lX11 -lm -lbsd
 
-CC = gcc
+CC = cc
 
 CFLAGS = -Wall -Wextra -Werror -fPIE -g #-fsanitize=address
 
