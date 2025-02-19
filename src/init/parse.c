@@ -207,6 +207,7 @@ bool	parse_file(t_list **file, t_data *data)
     data->mlx->addr = mlx_get_data_addr(data->mlx->img, &data->mlx->bpp, &data->mlx->size_line, &data->mlx->endian);
 
     render_scene(data);
+	mlx_key_hook(data->mlx->window, close_window, data->mlx);
 
     mlx_put_image_to_window(data->mlx->mlx, data->mlx->window, data->mlx->img, 0, 0);
     mlx_loop(data->mlx->mlx);

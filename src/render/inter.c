@@ -1,17 +1,15 @@
 #include "../../headers/main.h"
 #include "../../headers/math.h"
 #include "../../headers/minirt.h"
-#include <stdbool.h>
-
 
 bool	intersection(t_ray ray, t_data *data, t_hit *hit, t_ident id, int i)
 {
 	if (id == SP)
-		return (intersect_sphere(ray, *data->objects->spheres[i], hit)); // TO REVISE
+		return (intersect_sphere(ray, *data->objects->spheres[i], hit));
 	else if (id == PL)
-		return (intersect_plane(ray, *data->objects->planes[i], hit)); // TO REVISE
+		return (intersect_plane(ray, *data->objects->planes[i], hit));
 	else if (id == CY)
-		return (intersect_cylinder(ray, *data->objects->cylinders[i], hit)); //later later
+		return (intersect_cylinder(ray, *data->objects->cylinders[i], hit));
 	else
 		return (ft_putstr_fd("object does not exist", 2), 0);
 }
@@ -60,40 +58,31 @@ bool	intersect_sphere(t_ray ray, t_sphere sphere, t_hit *hit)
 
 
 bool intersect_cylinder(t_ray ray, t_cylinder cy, t_hit *hit) {
-    t_pos V = cy.vec; // Cylinder's axis direction
-    t_pos CO = vec_operation(ray.origin, cy.pos, SUB); // Vector from ray origin to cylinder center
-    double radius = cy.diameter / 2.0; // Radius of the cylinder
-    double height = cy.height; // Height of the cylinder
-
-    // Dot product of CO and V (cylinder axis)
+    t_pos V = cy.vec;
+    t_pos CO = vec_operation(ray.origin, cy.pos, SUB);
+    double radius = cy.diameter / 2.0;
+    double height = cy.height;
     double dv = vec_dot_cross(CO, V, DOT).d;
-    // Dot product of ray direction and V (cylinder axis)
     double Dv = vec_dot_cross(ray.dir, V, DOT).d;
 
-    // Vector A: CO - (CO . V) * V
     t_pos A = vec_operation(CO, vec_scalar(V, dv, MULT), SUB);
-    // Vector B: ray.dir - (ray.dir . V) * V
     t_pos B = vec_operation(ray.dir, vec_scalar(V, Dv, MULT), SUB);
-
-    // Coefficients for the quadratic equation
     double a = vec_dot_cross(B, B, DOT).d;
     double b = 2.0 * vec_dot_cross(A, B, DOT).d;
     double c = vec_dot_cross(A, A, DOT).d - (radius * radius);
 
-    // Discriminant of the quadratic equation
     double disc = b * b - 4 * a * c;
     if (disc < EPSILON)
-        return false; // No intersection if discriminant is negative
+        return (false);
 
     double sqrt_disc = sqrt(disc);
     double t0 = (-b - sqrt_disc) / (2 * a);
     double t1 = (-b + sqrt_disc) / (2 * a);
 
-    // Check if the intersection points are within the cylinder's height
     double t_curved = INFINITY;
     if (t0 > EPSILON) {
-        double s = dv + t0 * Dv; // Projection of the intersection point onto the cylinder axis
-        if (s >= -height / 2 && s <= height / 2) // Check if within height bounds
+        double s = dv + t0 * Dv;
+        if (s >= -height / 2 && s <= height / 2)
             t_curved = t0;
     }
     if (t1 > EPSILON && t1 < t_curved) {
@@ -102,13 +91,12 @@ bool intersect_cylinder(t_ray ray, t_cylinder cy, t_hit *hit) {
             t_curved = t1;
     }
 
-    // Check for intersections with the cylinder's caps
     double t_cap = INFINITY;
     t_pos normal_cap;
     t_pos cap_center;
 
-    if (fabs(Dv) > EPSILON) { // Ensure ray is not parallel to the cylinder axis
-        // Bottom Cap
+    if (fabs(Dv) > EPSILON)
+	{
         double t_bottom = (-dv - height / 2) / Dv;
         if (t_bottom > EPSILON) {
             t_pos P = vec_operation(ray.origin, vec_scalar(ray.dir, t_bottom, MULT), ADD);
@@ -116,11 +104,10 @@ bool intersect_cylinder(t_ray ray, t_cylinder cy, t_hit *hit) {
             t_pos P_to_center = vec_operation(P, cap_center, SUB);
             if (vec_dot_cross(P_to_center, P_to_center, DOT).d <= radius * radius && t_bottom < t_cap) {
                 t_cap = t_bottom;
-                normal_cap = vec_scalar(V, -1.0, MULT); // Normal points downward
+                normal_cap = vec_scalar(V, -1.0, MULT);
             }
         }
 
-        // Top Cap
         double t_top = (height / 2 - dv) / Dv;
         if (t_top > EPSILON) {
             t_pos P = vec_operation(ray.origin, vec_scalar(ray.dir, t_top, MULT), ADD);
@@ -128,31 +115,27 @@ bool intersect_cylinder(t_ray ray, t_cylinder cy, t_hit *hit) {
             t_pos P_to_center = vec_operation(P, cap_center, SUB);
             if (vec_dot_cross(P_to_center, P_to_center, DOT).d <= radius * radius && t_top < t_cap) {
                 t_cap = t_top;
-                normal_cap = V; // Normal points upward
+                normal_cap = V;
             }
         }
     }
 
-    // Find the closest valid intersection
     double t_min = fmin(t_curved, t_cap);
     if (t_min >= INFINITY)
-        return false; // No valid intersection
+        return false;
 
-    // Set the hit information
     hit->t = t_min;
     hit->point = vec_operation(ray.origin, vec_scalar(ray.dir, t_min, MULT), ADD);
 
     if (t_min == t_curved) {
-        // Intersection with the curved surface
         double s = dv + t_min * Dv;
         t_pos C_proj = vec_operation(cy.pos, vec_scalar(V, s, MULT), ADD);
         hit->normal = vec_normalize(vec_operation(hit->point, C_proj, SUB));
     } else {
-        // Intersection with a cap
         hit->normal = vec_normalize(normal_cap);
     }
 
-    hit->color = cy.color; // Set the color of the cylinder
+    hit->color = cy.color;
     return true;
 }
 

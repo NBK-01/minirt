@@ -1,14 +1,40 @@
 #include "../../../headers/main.h"
 #include "../../../headers/minirt.h"
 
-/*t_color	set_color(t_hit hit, t_data *data)*/
-/*{*/
-/*	t_color	color;*/
-/*	double	light;*/
-/**/
-/*	light = compute_lighting(hit, *data->light,  data);*/
-/*	color.r = fmin(255, (hit.color.r * light));*/
-/*    color.g = fmin(255, (hit.color.g * light));*/
-/*	color.b = fmin(255, (hit.color.b * light));*/
-/*	return (color);*/
-/*}*/
+t_color	clamp_color(t_color color)
+{
+    if (color.r > 255)
+		color.r = 255;
+    if (color.g > 255)
+		color.g = 255;
+    if (color.b > 255)
+		color.b = 255;
+    return (color);
+}
+
+int	color_to_int(t_color color)
+{
+    return (color.r << 16) | (color.g << 8) | color.b;
+}
+
+t_color	apply_gamma_correction(t_color color)
+{
+    color.r = pow(color.r / 255.0, 1 / 2.2) * 255;
+    color.g = pow(color.g / 255.0, 1 / 2.2) * 255;
+    color.b = pow(color.b / 255.0, 1 / 2.2) * 255;
+    return (clamp_color(color));
+}
+
+void	color_add(t_color *color, t_color other)
+{
+	color->r += other.r;
+	color->g += other.g;
+	color->b += other.b;
+}
+
+void	color_scalar_div(t_color *color, int scalar)
+{
+	color->r /= scalar;
+	color->g /= scalar;
+	color->b /= scalar;
+}
