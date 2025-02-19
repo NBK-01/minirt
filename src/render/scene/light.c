@@ -57,7 +57,7 @@ bool trace_shadows(t_data *data, t_pos hit_point)
 t_color compute_lighting(t_data *data, t_hit *hit, t_ray *ray)
 {
     t_color final_color;
-    double ambient_intensity = AMBIENT;
+    double ambient_intensity = data->ambient->ratio;
     double diffuse_intensity = 0.0;
     double specular_intensity = 0.0;
     t_pos light_dir;

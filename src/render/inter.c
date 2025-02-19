@@ -48,7 +48,10 @@ bool	intersect_sphere(t_ray ray, t_sphere sphere, t_hit *hit)
     quad.c = vec_dot_cross(quad.oc, quad.oc, DOT).d - (quad.rad * quad.rad);
 	hit->t = quadratic(quad.a, quad.b, quad.c);
     if (hit->t == 0)
+	{
+		hit->color = (t_color){0, 0, 0};
         return (false);
+	}
     hit->point = vec_operation(ray.origin, vec_scalar(ray.dir, hit->t, MULT), ADD);
     hit->normal = vec_normalize(vec_operation(hit->point, sphere.pos, SUB));
     hit->color = sphere.color;

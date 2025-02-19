@@ -204,7 +204,7 @@ bool	parse_file(t_list **file, t_data *data)
 	data->mlx->mlx = mlx_init();
     data->mlx->window = mlx_new_window(data->mlx->mlx, WIDTH, HEIGHT, "miniRT");
     data->mlx->img = mlx_new_image(data->mlx->mlx, WIDTH, HEIGHT);
-    data->mlx->data = (int *)mlx_get_data_addr(data->mlx->img, &data->mlx->bpp, &data->mlx->size_line, &data->mlx->endian);
+    data->mlx->addr = mlx_get_data_addr(data->mlx->img, &data->mlx->bpp, &data->mlx->size_line, &data->mlx->endian);
 
     render_scene(data);
 

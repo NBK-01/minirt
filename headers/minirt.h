@@ -17,7 +17,8 @@
 
 bool	intersect_sphere(t_ray ray, t_sphere sphere, t_hit *hit);
 bool	intersect_plane(t_ray ray, t_plane plane, t_hit *hit);
-bool intersect_cylinder(t_ray ray, t_cylinder cy, t_hit *hit);
+bool	intersect_cylinder(t_ray ray, t_cylinder cy, t_hit *hit);
+void	rt_pixel_put(t_mlx *data, int x, int y, int color);
 void	render_scene(t_data *data);
 bool	valid_args(int ac, char **av);
 int		read_file(char *filename, t_list **file);

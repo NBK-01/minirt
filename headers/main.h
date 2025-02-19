@@ -40,12 +40,9 @@
 # define BG_GREEN   "\033[42m"
 # define BG_YELLOW  "\033[43m"
 
-# define WIDTH		1280
-# define HEIGHT		700
-# define AMBIENT 0.2
-# define EPSILON 1e-4
-
-
+# define WIDTH		1920
+# define HEIGHT		1080
+# define EPSILON	1e-4
 
 typedef enum e_ident
 {
@@ -76,9 +73,9 @@ typedef struct s_vec
  * in a given scene, t_pos stores these coordinates*/
 typedef struct s_pos
 {
-	float	x;
-	float	y;
-	float	z;
+	double	x;
+	double	y;
+	double	z;
 }	t_pos;
 
 typedef struct s_ambient
@@ -105,13 +102,14 @@ typedef struct s_light
 }	t_light;
 
 typedef struct s_mlx {
-    void *mlx;
-    void *window;
-    void *img;
-    int *data;
-	int	bpp;
-	int	size_line;
-	int	endian;
+    void	*mlx;
+    void	*window;
+    void	*img;
+    int		*data;
+	char	*addr;
+	int		bpp;
+	int		size_line;
+	int		endian;
 } t_mlx;
 
 typedef struct s_sphere
