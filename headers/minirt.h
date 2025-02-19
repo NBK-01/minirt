@@ -15,6 +15,11 @@
 
 #include "main.h"
 
+t_color	clamp_color(t_color color);
+t_color	apply_gamma_correction(t_color color);
+void	color_add(t_color *color, t_color other);
+int		color_to_int(t_color color);
+void	color_scalar_div(t_color *color, int scalar);
 bool	intersect_sphere(t_ray ray, t_sphere sphere, t_hit *hit);
 bool	intersect_plane(t_ray ray, t_plane plane, t_hit *hit);
 bool	intersect_cylinder(t_ray ray, t_cylinder cy, t_hit *hit);
@@ -49,6 +54,7 @@ bool	exit_err(char *msg, char **split);
 bool	validate_light(char **split);
 bool	validate_camera(char **split);
 bool	validate_ambient(char **split);
+int		close_window(int keycode, void *param);
 
 
 #endif // !MINIRT>_H

@@ -40,9 +40,9 @@
 # define BG_GREEN   "\033[42m"
 # define BG_YELLOW  "\033[43m"
 
-# define WIDTH		1920
-# define HEIGHT		1080
-# define EPSILON	1e-4
+# define WIDTH		1280
+# define HEIGHT		700
+# define EPSILON	1e-2
 
 typedef enum e_ident
 {

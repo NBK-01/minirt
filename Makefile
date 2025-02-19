@@ -14,7 +14,7 @@ LIB = -L ./lib/mlx -lmlx -lXext -lX11 -lm -lbsd
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -fPIE -g #-fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -fPIE -g
 
 SRCS = main init/parse utils/utils utils/math/vectors render/scene/scene render/scene/colors render/scene/light \
 		render/scene/rays render/inter utils/math/helpers validation/validation_utils validation/object_validation validation/checkers \
