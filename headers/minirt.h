@@ -6,7 +6,7 @@
 /*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 14:55:34 by mmuhaise          #+#    #+#             */
-/*   Updated: 2025/02/15 00:14:58 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2025/02/19 08:56:03 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,10 @@ bool	check_coordinates(char *split);
 bool	check_vector(char *split);
 bool	check_rgb(char *split);
 void	free_split(char **split);
+bool	exit_err(char *msg, char **split);
+bool	validate_light(char **split);
+bool	validate_camera(char **split);
+bool	validate_ambient(char **split);
 
 
 #endif // !MINIRT>_H

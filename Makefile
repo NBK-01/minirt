@@ -17,7 +17,8 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -fPIE -g #-fsanitize=address
 
 SRCS = main init/parse utils/utils utils/math/vectors render/scene/scene render/scene/colors render/scene/light \
-		render/scene/rays render/inter utils/math/helpers validation/validation_utils validation/object_validation validation/checkers
+		render/scene/rays render/inter utils/math/helpers validation/validation_utils validation/object_validation validation/checkers \
+		validation/acl_validation
 
 SRC = $(addprefix src/, $(addsuffix .c, $(SRCS)))
 

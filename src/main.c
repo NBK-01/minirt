@@ -6,7 +6,7 @@
 /*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 11:48:34 by mmuhaise          #+#    #+#             */
-/*   Updated: 2025/02/15 00:01:23 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2025/02/19 00:44:36 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,13 @@ bool	initialize(char *filename)
 
 	file = NULL;
 	data = malloc(sizeof(t_data));
-	(void)data;
 	if (!read_file(filename, &file))
-		return (false);
+		return (free(data), false);
 	if (!validate_file(&file))
-		return (false);
+		return (free(data), false);
 	if (!parse_file(&file, data))
-		return (false);
-	return (true);
+		return (free(data), false);
+	return (free(data), true);
 }
 
 int	main(int ac, char **av)
