@@ -63,7 +63,7 @@ int render_scene(t_data *data)
 		for (int x = 0; x < WIDTH; x++)
 		{
 			ray = generate_ray(data->camera, x, y);
-			if (!find_closest_intersection(ray, data, &hit))
+			if (find_closest_intersection(ray, data, &hit))
 				color = (t_color){0,0,0};
 			else
 				color = compute_lighting(data, &hit, &ray);
