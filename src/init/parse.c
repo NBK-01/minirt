@@ -85,7 +85,7 @@ void	parse_plane(char **split, t_data *data)
 	t_plane	*plane;
 
 	plane = malloc(sizeof(t_plane));
-	plane->ident = ft_strdup("pl");
+	/*plane->ident = ft_strdup("pl");*/
 	plane->pos = parse_pos(split[1]);
 	plane->vec = parse_pos(split[2]);
 	plane->color = parse_color(split[3]);
@@ -99,7 +99,7 @@ void	parse_sphere(char **split, t_data *data)
 	t_sphere	*sphere;
 
 	sphere = malloc(sizeof(t_sphere));
-	sphere->ident = ft_strdup("sp");
+	/*sphere->ident = ft_strdup("sp");*/
 	sphere->pos = parse_pos(split[1]);
 	sphere->diameter = ft_atof(split[2]);
 	sphere->color = parse_color(split[3]);
@@ -113,7 +113,7 @@ void	parse_cylinder(char **split, t_data *data)
 	t_cylinder	*cyl;
 
 	cyl = malloc(sizeof(t_cylinder));
-	cyl->ident = ft_strdup("cy");
+	/*cyl->ident = ft_strdup("cy");*/
 	cyl->pos = parse_pos(split[1]);
 	cyl->vec = parse_pos(split[2]);
 	cyl->diameter = ft_atof(split[3]);
@@ -180,6 +180,7 @@ void	init_data(t_data *data)
 	}
 }
 
+
 bool	parse_file(t_list **file, t_data *data)
 {
 	t_list	*tmp;
@@ -199,19 +200,19 @@ bool	parse_file(t_list **file, t_data *data)
 		free_split(split);
 		tmp = tmp->next;
 	}
+	ft_lstclear(file);
 	data->mlx = malloc(sizeof(t_mlx));
-
 	data->mlx->mlx = mlx_init();
     data->mlx->window = mlx_new_window(data->mlx->mlx, WIDTH, HEIGHT, "miniRT");
     data->mlx->img = mlx_new_image(data->mlx->mlx, WIDTH, HEIGHT);
     data->mlx->addr = mlx_get_data_addr(data->mlx->img, &data->mlx->bpp, &data->mlx->size_line, &data->mlx->endian);
 
+	mlx_key_hook(data->mlx->window, close_window, data);
     render_scene(data);
-	mlx_key_hook(data->mlx->window, close_window, data->mlx);
 
-    mlx_put_image_to_window(data->mlx->mlx, data->mlx->window, data->mlx->img, 0, 0);
+	/*mlx_loop_hook(data->mlx, &render_scene, data);*/
+	mlx_hook(data->mlx->window, DestroyNotify, StructureNotifyMask, &on_destroy, data);
     mlx_loop(data->mlx->mlx);
 	return (true);
 }
-
 

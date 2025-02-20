@@ -142,7 +142,7 @@ bool intersect_cylinder(t_ray ray, t_cylinder cy, t_hit *hit) {
 int	find_closest_intersection(t_ray ray, t_data *data, t_hit *closest_hit)
 {
     t_hit temp_hit;
-    closest_hit->t = INFINITY;
+    closest_hit->t = INFINITY;;
     int hit_anything = 0;
 	int i = -1;
 

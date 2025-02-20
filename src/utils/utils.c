@@ -13,6 +13,7 @@
 #include "../../headers/main.h"
 #include "../../headers/minirt.h"
 
+
 double	ft_atof(const char *str)
 {
 	double	result;

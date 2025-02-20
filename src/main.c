@@ -26,7 +26,8 @@ bool	initialize(char *filename)
 		return (free(data), false);
 	if (!parse_file(&file, data))
 		return (free(data), false);
-	return (free(data), true);
+	free(data);
+	return (true);
 }
 
 int	main(int ac, char **av)

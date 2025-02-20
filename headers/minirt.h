@@ -17,6 +17,7 @@
 
 t_color	clamp_color(t_color color);
 t_color	apply_gamma_correction(t_color color);
+int		on_destroy(t_data *data);
 void	color_add(t_color *color, t_color other);
 int		color_to_int(t_color color);
 void	color_scalar_div(t_color *color, int scalar);
@@ -24,7 +25,7 @@ bool	intersect_sphere(t_ray ray, t_sphere sphere, t_hit *hit);
 bool	intersect_plane(t_ray ray, t_plane plane, t_hit *hit);
 bool	intersect_cylinder(t_ray ray, t_cylinder cy, t_hit *hit);
 void	rt_pixel_put(t_mlx *data, int x, int y, int color);
-void	render_scene(t_data *data);
+int		render_scene(t_data *data);
 bool	valid_args(int ac, char **av);
 int		read_file(char *filename, t_list **file);
 bool	parse_file(t_list **file, t_data *data);

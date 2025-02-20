@@ -2,6 +2,7 @@
 #include "../../../headers/minirt.h"
 #include "../../../headers/main.h"
 #include "../../../headers/math.h"
+#include <stdio.h>
 #define SHADOW_BIAS 0.001
 #define SHADOW_SAMPLES 10
 
@@ -66,6 +67,7 @@ t_color	compute_lighting(t_data *data, t_hit *hit, t_ray *ray)
     t_color	final_color;
     t_pos	light_dir;
     double	dot_nl;
+	hit->reflectivity = 0;
 
     final_color.r = hit->color.r * data->ambient->ratio;
     final_color.g = hit->color.g * data->ambient->ratio;
@@ -84,14 +86,16 @@ t_color	compute_lighting(t_data *data, t_hit *hit, t_ray *ray)
         final_color.g += hit->color.g * data->light->ratio * dot_nl;
         final_color.b += hit->color.b * data->light->ratio * dot_nl;
     }
-
-    if (hit->reflectivity > 0)
-    {
-        final_color.r += 255 * calc_specular(hit, light_dir, ray, dot_nl, data);
-        final_color.g += 255 * calc_specular(hit, light_dir, ray, dot_nl, data);
-        final_color.b += 255 * calc_specular(hit, light_dir, ray, dot_nl, data);
-    }
-	final_color = clamp_color(final_color);
+	if (hit)
+	{
+		if (hit->reflectivity && hit->reflectivity > 0)
+		{
+			final_color.r += 255 * calc_specular(hit, light_dir, ray, dot_nl, data);
+			final_color.g += 255 * calc_specular(hit, light_dir, ray, dot_nl, data);
+			final_color.b += 255 * calc_specular(hit, light_dir, ray, dot_nl, data);
+		}
+	}
+    final_color = clamp_color(final_color);
     return (final_color);
 }
 
