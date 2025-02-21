@@ -18,9 +18,17 @@ bool	validate_sphere(char **split)
 	char	*trim;
 	int		trim_size;
 
-	trim = ft_strtrim(split[4], "\n");
-	trim_size = ft_strlen(trim);
-	free(trim);
+
+	if (split && split[0] && split[1] && split[2] && split[3] && split[4])
+	{
+		trim = ft_strtrim(split[4], "\n");
+		trim_size = ft_strlen(trim);
+		free(trim);
+	}
+	while (split[i])
+	{
+
+	}
 	if (split[1] && split[2] && split[3]
 		&& !trim_size)
 	{
@@ -41,21 +49,28 @@ bool	validate_plane(char **split)
 {
 	char	*trim;
 	int		trim_size;
+	int		i = 0;
 
-	trim = ft_strtrim(split[4], "\n");
-	trim_size = ft_strlen(trim);
-	free(trim);
-	if (split[1] && split[2] && split[3]
-		&& !trim_size)
+	if (split[1] && split[2] && split[3] && split[4])
 	{
-		if (!check_coordinates(split[1]))
-			return (false);
-		if (!check_vector(split[2]))
-			return (false);
-		if (!check_rgb(split[3]))
-			return (false);
+		trim = ft_strtrim(split[4], "\n");
+		trim_size = ft_strlen(trim);
+		free(trim);
 	}
-	else
+	while (split[i])
+	{
+		if (i == 1)
+			if (!check_coordinates(split[i]))
+				return (false);
+		if (i == 2)
+			if (!check_vector(split[i]))
+				return (false);
+		if (i == 3)
+			if (!check_rgb(split[i]))
+				return (false);
+		i++;
+	}
+	if (i < 3)
 		return (exit_err("Error: invalid plane config\n", NULL));
 	return (true);
 }
@@ -116,35 +131,53 @@ bool	validate_file(t_list **file)
 			{
 				has_ambient = true;
 				if (!validate_ambient(split))
+				{
+					ft_lstclear(file);
 					return (free_split(split), false);
+				}
 			}
 			if (!ft_strcmp(split[0], "C") || !ft_strcmp(split[0], "C\n"))
 			{
 				has_camera = true;
 				if (!validate_camera(split))
+				{
+					ft_lstclear(file);
 					return (free_split(split), false);
+				}
 			}
 			if (!ft_strcmp(split[0], "L") || !ft_strcmp(split[0], "L\n"))
 			{
 				has_light = true;
 				if (!validate_light(split))
+				{
+					ft_lstclear(file);
 					return (free_split(split), false);
+				}
 			}
 		}
 		if (split[0] && (!ft_strcmp(split[0], "sp") || !ft_strcmp(split[0], "sp\n")))
 		{
 			if (!validate_sphere(split))
+			{
+				ft_lstclear(file);
 				return (free_split(split), false);
+			}
 		}
 		if (split[0] && (!ft_strcmp(split[0], "pl") || !ft_strcmp(split[0], "pl\n")))
 		{
 			if (!validate_plane(split))
+			{
+				ft_lstclear(file);
 				return (free_split(split), false);
+			}
 		}
 		if (split[0] && (!ft_strcmp(split[0], "cy") || !ft_strcmp(split[0], "cy\n")))
 		{
 			if (!validate_cylinder(split))
+			{
+				ft_lstclear(file);
 				return (free_split(split), false);
+			}
 		}
 		free_split(split);
 		tmp = tmp->next;
