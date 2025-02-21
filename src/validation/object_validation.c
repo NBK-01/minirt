@@ -6,7 +6,7 @@
 /*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 23:51:31 by mmuhaise          #+#    #+#             */
-/*   Updated: 2025/02/19 09:12:50 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2025/02/22 00:14:41 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ bool	validate_sphere(char **split)
 	int		i;
 
 	i = 0;
+	trim_size = 0;
 	if (split && split[0] && split[1] && split[2] && split[3] && split[4])
 	{
 		trim = ft_strtrim(split[4], "\n");
@@ -36,15 +37,15 @@ bool	validate_sphere(char **split)
 		{
 			diameter = ft_atof(split[i]);
 			if (!is_valid_double(split[i]) || diameter < 0)
-				return (exit_err("Error: invalid sphere diameter\n",  NULL));
+				return (exit_err("Error: invalid sphere diameter\n", NULL));
 		}
 		if (i == 3)
 			if (!check_rgb(split[i]))
 				return (false);
 		i++;
 	}
-	if (i < 4 && !trim_size)
-		return (exit_err("Error: invalid sphere config",  NULL));
+	if (trim_size)
+		return (exit_err("Error: invalid sphere config", NULL));
 	return (true);
 }
 
@@ -54,14 +55,15 @@ bool	validate_plane(char **split)
 	int		trim_size;
 	int		i;
 
-	i = 0;
+	i = -1;
+	trim_size = 0;
 	if (split && split[0] && split[1] && split[2] && split[3] && split[4])
 	{
 		trim = ft_strtrim(split[4], "\n");
 		trim_size = ft_strlen(trim);
 		free(trim);
 	}
-	while (split[i])
+	while (split[++i])
 	{
 		if (i == 1)
 			if (!check_coordinates(split[i]))
@@ -72,9 +74,8 @@ bool	validate_plane(char **split)
 		if (i == 3)
 			if (!check_rgb(split[i]))
 				return (false);
-		i++;
 	}
-	if (i < 4 && !trim_size)
+	if (trim_size)
 		return (exit_err("Error: invalid plane config\n", NULL));
 	return (true);
 }
@@ -88,8 +89,9 @@ bool	validate_cylinder(char **split)
 	int		i;
 
 	i = 0;
+	trim_size = 0;
 	if (split && split[0] && split[1] && split[2]
-			&& split[3] && split[4] && split[5] && split[6])
+		&& split[3] && split[4] && split[5] && split[6])
 	{
 		trim = ft_strtrim(split[6], "\n");
 		trim_size = ft_strlen(trim);
@@ -120,8 +122,8 @@ bool	validate_cylinder(char **split)
 				return (false);
 		i++;
 	}
-	if (i < 6 && !trim_size)
-		return (false);
+	if (trim_size)
+		return (exit_err("Error: invalid cylinder config\n", NULL));
 	return (true);
 }
 
@@ -174,7 +176,8 @@ bool	validate_file(t_list **file)
 				}
 			}
 		}
-		if (split[0] && (!ft_strcmp(split[0], "sp") || !ft_strcmp(split[0], "sp\n")))
+		if (split[0] && (!ft_strcmp(split[0], "sp")
+				|| !ft_strcmp(split[0], "sp\n")))
 		{
 			if (!validate_sphere(split))
 			{
@@ -182,7 +185,8 @@ bool	validate_file(t_list **file)
 				return (free_split(split), false);
 			}
 		}
-		if (split[0] && (!ft_strcmp(split[0], "pl") || !ft_strcmp(split[0], "pl\n")))
+		if (split[0] && (!ft_strcmp(split[0], "pl")
+				|| !ft_strcmp(split[0], "pl\n")))
 		{
 			if (!validate_plane(split))
 			{
@@ -190,7 +194,8 @@ bool	validate_file(t_list **file)
 				return (free_split(split), false);
 			}
 		}
-		if (split[0] && (!ft_strcmp(split[0], "cy") || !ft_strcmp(split[0], "cy\n")))
+		if (split[0] && (!ft_strcmp(split[0], "cy")
+				|| !ft_strcmp(split[0], "cy\n")))
 		{
 			if (!validate_cylinder(split))
 			{
@@ -202,6 +207,6 @@ bool	validate_file(t_list **file)
 		tmp = tmp->next;
 	}
 	if (!has_ambient || !has_camera || !has_light)
-		return (ft_putstr_fd(RED "Error: file must contain 'A', 'C', and 'L'\n" RESET, 2), false);
+		return (exit_err("Error: file must contain 'A', 'C', and 'L'\n", NULL));
 	return (true);
 }

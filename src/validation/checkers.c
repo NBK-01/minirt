@@ -6,7 +6,7 @@
 /*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/15 00:00:37 by mmuhaise          #+#    #+#             */
-/*   Updated: 2025/02/19 08:34:13 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2025/02/21 22:45:33 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ bool	check_coordinates(char *split)
 	return (true);
 }
 
-
 int	check_config(char *str)
 {
 	char	*arr[7];
@@ -97,12 +96,12 @@ int	check_config(char *str)
 
 	i = -1;
 	arr[0] = "A";
-    arr[1] = "C";
-    arr[2] = "L";
-    arr[3] = "sp";
-    arr[4] = "cy";
-    arr[5] = "pl";
-    arr[6] = "breakme";
+	arr[1] = "C";
+	arr[2] = "L";
+	arr[3] = "sp";
+	arr[4] = "cy";
+	arr[5] = "pl";
+	arr[6] = "breakme";
 	if (!ft_strcmp(str, "\n"))
 		return (1);
 	while (++i < 6)

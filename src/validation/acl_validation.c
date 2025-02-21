@@ -6,7 +6,7 @@
 /*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 08:54:40 by mmuhaise          #+#    #+#             */
-/*   Updated: 2025/02/19 08:55:02 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2025/02/22 00:17:18 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,12 @@ bool	validate_light(char **split)
 		return (exit_err("Error: invalid light config\n", NULL));
 	free(trimmed_brightness);
 	return (true);
+}
+
+bool	is_valid_int(const char *str)
+{
+	char	*endptr;
+
+	ft_strtol(str, &endptr, 10);
+	return (*endptr == '\0');
 }

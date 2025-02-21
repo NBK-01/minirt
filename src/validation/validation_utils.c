@@ -6,11 +6,12 @@
 /*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:31:15 by mmuhaise          #+#    #+#             */
-/*   Updated: 2025/02/14 22:16:12 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2025/02/22 00:17:12 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/main.h"
+#include "../../headers/minirt.h"
 
 static bool	valid_ext(char *str)
 {
@@ -32,8 +33,7 @@ bool	valid_args(int ac, char **av)
 		return (ft_putstr_fd(RED "Error: usage: <./minirt> <filename>\n" RESET,
 				2), false);
 	if (!valid_ext(av[1]))
-		return (ft_putstr_fd(RED "Error: invalid file extension: must be .rt\n" RESET,
-				2), false);
+		return (exit_err("Error: invalid file extension: must be .rt\n", NULL));
 	fd = ft_open(av[1]);
 	if (!fd)
 		return (close(fd), false);
@@ -123,13 +123,5 @@ bool	is_valid_double(const char *str)
 	char	*endptr;
 
 	ft_strtod(str, &endptr);
-	return (*endptr == '\0');
-}
-
-bool	is_valid_int(const char *str)
-{
-	char	*endptr;
-
-	ft_strtol(str, &endptr, 10);
 	return (*endptr == '\0');
 }

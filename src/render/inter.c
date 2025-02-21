@@ -6,7 +6,7 @@
 /*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 13:08:25 by mmuhaise          #+#    #+#             */
-/*   Updated: 2025/02/21 13:11:51 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2025/02/22 00:13:46 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ bool	intersect_sphere(t_ray ray, t_sphere sphere, t_hit *hit)
 	hit->color = sphere.color;
 	return (true);
 }
-
 
 bool	intersect_cylinder(t_ray ray, t_cylinder cy, t_hit *hit)
 {
