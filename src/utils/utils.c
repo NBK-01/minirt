@@ -6,13 +6,22 @@
 /*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 14:08:54 by mmuhaise          #+#    #+#             */
-/*   Updated: 2025/02/15 00:14:44 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2025/02/21 13:16:02 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/main.h"
 #include "../../headers/minirt.h"
 
+void	skip_ws(const char **str, int *sign)
+{
+	while (**str == ' ' || ((*(*str)) >= 9 && **str <= 13))
+		(*str)++;
+	if (**str == '-')
+		(*sign) = -1;
+	if (**str == '-' || **str == '+')
+		(*str)++;
+}
 
 double	ft_atof(const char *str)
 {
@@ -25,13 +34,7 @@ double	ft_atof(const char *str)
 	fraction = 0.0;
 	sign = 1;
 	divisor = 1;
-
-	while (*str == ' ' || (*str >= 9 && *str <= 13))
-		str++;
-	if (*str == '-')
-		sign = -1;
-	if (*str == '-' || *str == '+')
-		str++;
+	skip_ws(&str, &sign);
 	while (*str >= '0' && *str <= '9')
 	{
 		result = result * 10.0 + (*str - '0');
@@ -48,6 +51,32 @@ double	ft_atof(const char *str)
 	return (sign * (result + fraction / divisor));
 }
 
+static void	set_line(char *line, t_list **file)
+{
+	t_list	*new;
+
+	new = ft_lstnew(line);
+	ft_lstadd_back(file, new);
+}
+
+int	read_file(char *filename, t_list **file)
+{
+	int		fd;
+	char	*line;
+
+	fd = ft_open(filename);
+	line = get_next_line(fd);
+	if (!line)
+		return (ft_putstr_fd(RED "Error: empty file :() \n" RESET, 2), 0);
+	while (line)
+	{
+		set_line(line, file);
+		line = get_next_line(fd);
+	}
+	close(fd);
+	return (1);
+}
+
 void	free_split(char **split)
 {
 	int	i;
@@ -61,99 +90,4 @@ void	free_split(char **split)
 		i++;
 	}
 	free(split);
-}
-
-void	print_ambient(t_ambient *ambient)
-{
-	if (ambient == NULL)
-	{
-		printf("Ambient lighting is not set.\n");
-		return ;
-	}
-	printf("Ambient Lighting:\n");
-	printf("  Identifier: %c\n", ambient->ident);
-	printf("  Ratio: %f\n", ambient->ratio);
-	printf("  Color: R=%d, G=%d, B=%d\n", ambient->color.r, ambient->color.g, ambient->color.b);
-}
-
-void	print_camera(t_camera *camera)
-{
-	if (camera == NULL)
-	{
-		printf("Camera is not set.\n");
-		return ;
-	}
-	printf("Camera:\n");
-	printf("  Identifier: %c\n", camera->ident);
-	printf("  Position: x=%f, y=%f, z=%f\n", camera->pos.x, camera->pos.y, camera->pos.z);
-	printf("  Orientation: x=%f, y=%f, z=%f\n", camera->vec.x, camera->vec.y, camera->vec.z);
-	printf("  Field of View: %d\n", camera->fov);
-}
-
-void	print_light(t_light *light)
-{
-	if (light == NULL)
-	{
-		printf("Light is not set.\n");
-		return ;
-	}
-	printf("Light:\n");
-	printf("  Identifier: %c\n", light->ident);
-	printf("  Position: x=%f, y=%f, z=%f\n", light->pos.x, light->pos.y, light->pos.z);
-	printf("  Ratio: %f\n", light->ratio);
-	printf("  Color: R=%d, G=%d, B=%d\n", light->color.r, light->color.g, light->color.b);
-}
-
-void	print_plane(t_plane *plane)
-{
-	if (plane == NULL)
-	{
-		printf("Plane is not set.\n");
-		return ;
-	}
-	printf("Plane:\n");
-	printf("  Identifier: %s\n", plane->ident);
-	printf("  Position: x=%f, y=%f, z=%f\n", plane->pos.x, plane->pos.y, plane->pos.z);
-	printf("  Vector: x=%f, y=%f, z=%f\n", plane->vec.x, plane->vec.y, plane->vec.z);
-	printf("  Color: R=%d, G=%d, B=%d\n", plane->color.r, plane->color.g, plane->color.b);
-}
-
-void	print_sphere(t_sphere *sphere)
-{
-	if (sphere == NULL)
-	{
-		printf("Sphere is not set.\n");
-		return ;
-	}
-	printf("Sphere:\n");
-	printf("  Identifier: %s\n", sphere->ident);
-	printf("  Position: x=%f, y=%f, z=%f\n", sphere->pos.x, sphere->pos.y, sphere->pos.z);
-	printf("  Diameter: %f\n", sphere->diameter);
-	printf("  Color: R=%d, G=%d, B=%d\n", sphere->color.r, sphere->color.g, sphere->color.b);
-}
-
-void	print_cylinder(t_cylinder *cylinder)
-{
-	if (cylinder == NULL)
-	{
-		printf("Cylinder is not set.\n");
-		return ;
-	}
-	printf("Cylinder:\n");
-	printf("  Identifier: %s\n", cylinder->ident);
-	printf("  Position: x=%f, y=%f, z=%f\n", cylinder->pos.x, cylinder->pos.y, cylinder->pos.z);
-	printf("  Orientation: x=%f, y=%f, z=%f\n", cylinder->vec.x, cylinder->vec.y, cylinder->vec.z);
-	printf("  Diameter: %f\n", cylinder->diameter);
-	printf("  Height: %f\n", cylinder->height);
-	printf("  Color: R=%d, G=%d, B=%d\n", cylinder->color.r, cylinder->color.g, cylinder->color.b);
-}
-
-void	print_data(t_data *data)
-{
-	print_ambient(data->ambient);
-	print_camera(data->camera);
-	print_light(data->light);
-	/*print_sphere(data->sphere[0]);*/
-	/*print_plane(data->plane);*/
-	/*print_cylinder(data->cylinder);*/
 }

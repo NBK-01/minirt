@@ -6,7 +6,7 @@
 /*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:31:04 by mmuhaise          #+#    #+#             */
-/*   Updated: 2025/02/10 13:41:41 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2025/02/21 13:20:54 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,12 @@
 
 typedef enum e_ident
 {
-	SP, //sphere	
-	PL, //plane
-	CY, //cylinder
-	L,	//light
-	C,	//camera
-	A,	//ambient lighting
+	SP,
+	PL,
+	CY,
+	L,
+	C,
+	A,
 }	t_ident;
 
 /*RGB, no more no less*/
@@ -98,19 +98,19 @@ typedef struct s_light
 	char	ident;
 	t_pos	pos;
 	float	ratio;
-	t_color	color; // not used in mando -- will keep as white or remove. we'll find out :)
+	t_color	color;
 }	t_light;
 
 typedef struct s_mlx {
-    void	*mlx;
-    void	*window;
-    void	*img;
-    int		*data;
+	void	*mlx;
+	void	*window;
+	void	*img;
+	int		*data;
 	char	*addr;
 	int		bpp;
 	int		size_line;
 	int		endian;
-} t_mlx;
+}	t_mlx;
 
 typedef struct s_sphere
 {
@@ -144,9 +144,7 @@ typedef struct s_ray
 {
 	t_pos	origin;
 	t_pos	dir;
-	/*t_inter	*inter;*/
-}	t_ray; ;
-
+}	t_ray;
 
 typedef struct s_cylinder
 {
@@ -158,14 +156,13 @@ typedef struct s_cylinder
 	t_color	color;
 }	t_cylinder;
 
-
 typedef struct s_hit {
-    double t;
-    t_pos point;
-    t_pos normal;
-    t_color color;
-	double reflectivity;
-} t_hit;
+	double		t;
+	t_pos		point;
+	t_pos		normal;
+	t_color		color;
+	double		reflectivity;
+}	t_hit;
 
 typedef struct s_objects
 {
@@ -174,15 +171,11 @@ typedef struct s_objects
 	t_cylinder	**cylinders;
 }	t_objects;
 
-
 typedef struct s_data
 {
 	t_ambient	*ambient;
 	t_camera	*camera;
 	t_light		*light;
-	// t_sphere	*sphere;
-	// t_plane		*plane;
-	// t_cylinder	*cylinder;
 	t_objects	*objects;
 	int			objs_count;
 	int			spheres_count;

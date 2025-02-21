@@ -22,7 +22,6 @@ bool	exit_err(char *msg, char **split)
 	return (false);
 }
 
-
 bool	check_rgb(char *split)
 {
 	char	**color_split;
@@ -90,19 +89,26 @@ bool	check_coordinates(char *split)
 	return (true);
 }
 
+
 int	check_config(char *str)
 {
-	char	*arr[] = {"A", "C", "L", "sp", "cy", "pl", "breakme"};
+	char	*arr[7];
 	int		i;
 
-	i = 0;
+	i = -1;
+	arr[0] = "A";
+    arr[1] = "C";
+    arr[2] = "L";
+    arr[3] = "sp";
+    arr[4] = "cy";
+    arr[5] = "pl";
+    arr[6] = "breakme";
 	if (!ft_strcmp(str, "\n"))
 		return (1);
-	while (i < 6)
+	while (++i < 6)
 	{
 		if (!ft_strcmp(str, arr[i]))
 			break ;
-		i++;
 	}
 	if (i > 5)
 		return (0);

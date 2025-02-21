@@ -11,14 +11,16 @@
 /* ************************************************************************** */
 
 #include "../../headers/minirt.h"
+#include <stdio.h>
 
 bool	validate_sphere(char **split)
 {
 	double	diameter;
 	char	*trim;
 	int		trim_size;
+	int		i;
 
-
+	i = 0;
 	if (split && split[0] && split[1] && split[2] && split[3] && split[4])
 	{
 		trim = ft_strtrim(split[4], "\n");
@@ -27,21 +29,22 @@ bool	validate_sphere(char **split)
 	}
 	while (split[i])
 	{
-
+		if (i == 1)
+			if (!check_coordinates(split[i]))
+				return (false);
+		if (i == 2)
+		{
+			diameter = ft_atof(split[i]);
+			if (!is_valid_double(split[i]) || diameter < 0)
+				return (exit_err("Error: invalid sphere diameter\n",  NULL));
+		}
+		if (i == 3)
+			if (!check_rgb(split[i]))
+				return (false);
+		i++;
 	}
-	if (split[1] && split[2] && split[3]
-		&& !trim_size)
-	{
-		if (!check_coordinates(split[1]))
-			return (false);
-		diameter = ft_atof(split[2]);
-		if (!is_valid_double(split[2]) || diameter < 0)
-			return (exit_err("Error: invalid sphere diameter\n", NULL));
-		if (!check_rgb(split[3]))
-			return (false);
-	}
-	else
-		return (exit_err("Error: invalid sphere config\n", NULL));
+	if (i < 4 && !trim_size)
+		return (exit_err("Error: invalid sphere config",  NULL));
 	return (true);
 }
 
@@ -49,9 +52,10 @@ bool	validate_plane(char **split)
 {
 	char	*trim;
 	int		trim_size;
-	int		i = 0;
+	int		i;
 
-	if (split[1] && split[2] && split[3] && split[4])
+	i = 0;
+	if (split && split[0] && split[1] && split[2] && split[3] && split[4])
 	{
 		trim = ft_strtrim(split[4], "\n");
 		trim_size = ft_strlen(trim);
@@ -70,7 +74,7 @@ bool	validate_plane(char **split)
 				return (false);
 		i++;
 	}
-	if (i < 3)
+	if (i < 4 && !trim_size)
 		return (exit_err("Error: invalid plane config\n", NULL));
 	return (true);
 }
@@ -81,28 +85,43 @@ bool	validate_cylinder(char **split)
 	double	height;
 	char	*trim;
 	int		trim_size;
+	int		i;
 
-	trim = ft_strtrim(split[6], "\n");
-	trim_size = ft_strlen(trim);
-	free(trim);
-	if (split[1] && split[2] && split[3] && split[4]
-		&& split[5] && !trim_size)
+	i = 0;
+	if (split && split[0] && split[1] && split[2]
+			&& split[3] && split[4] && split[5] && split[6])
 	{
-		if (!check_coordinates(split[1]))
-			return (false);
-		if (!check_vector(split[2]))
-			return (false);
-		diameter = ft_atof(split[3]);
-		if (!is_valid_double(split[3]) || diameter < 0)
-			return (exit_err("Error: invalid cylinder diameter\n", NULL));
-		height = ft_atof(split[4]);
-		if (!is_valid_double(split[4]) || height < 0)
-			return (exit_err("Error: invalid cylinder height\n", NULL));
-		if (!check_rgb(split[5]))
-			return (false);
+		trim = ft_strtrim(split[6], "\n");
+		trim_size = ft_strlen(trim);
+		free(trim);
 	}
-	else
-		return (exit_err("Error: invalid plane config\n", NULL));
+	while (split[i])
+	{
+		if (i == 1)
+			if (!check_coordinates(split[i]))
+				return (false);
+		if (i == 2)
+			if (!check_vector(split[i]))
+				return (false);
+		if (i == 3)
+		{
+			diameter = ft_atof(split[3]);
+			if (!is_valid_double(split[i]) || diameter < 0)
+				return (false);
+		}
+		if (i == 4)
+		{
+			height = ft_atof(split[i]);
+			if (!is_valid_double(split[i]) || height < 0)
+				return (false);
+		}
+		if (i == 5)
+			if (!check_rgb(split[i]))
+				return (false);
+		i++;
+	}
+	if (i < 6 && !trim_size)
+		return (false);
 	return (true);
 }
 

@@ -1,4 +1,5 @@
 #include "../../headers/main.h"
+#include "../../headers/minirt.h"
 
 void	rt_pixel_put(t_mlx *data, int x, int y, int color)
 {
@@ -8,32 +9,19 @@ void	rt_pixel_put(t_mlx *data, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
-void	free_objs(t_data *data)
+void	init_mlx(t_data *data)
 {
-	int	i;
-
-	i = -1;
-	while (++i < data->spheres_count)
-		free(data->objects->spheres[i]);
-	i = -1;
-	while (++i < data->planes_count)
-		free(data->objects->planes[i]);
-	i = -1;
-	while (++i < data->cylinders_count)
-		free(data->objects->spheres[i]);
-	free(data->objects->spheres);
-	free(data->objects->cylinders);
-	free(data->objects->planes);
-	free(data->objects);
+	data->mlx = malloc(sizeof(t_mlx));
+	data->mlx->mlx = mlx_init();
+    data->mlx->window = mlx_new_window(data->mlx->mlx, WIDTH, HEIGHT, "miniRT");
+    data->mlx->img = mlx_new_image(data->mlx->mlx, WIDTH, HEIGHT);
+    data->mlx->addr = mlx_get_data_addr(data->mlx->img, &data->mlx->bpp, &data->mlx->size_line, &data->mlx->endian);
+	mlx_key_hook(data->mlx->window, close_window, data);
+    render_scene(data);
+	mlx_hook(data->mlx->window, DestroyNotify, StructureNotifyMask, &on_destroy, data);
+    mlx_loop(data->mlx->mlx);
 }
 
-void	free_scene(t_data *data)
-{
-	free(data->ambient);
-	free(data->light);
-	free(data->camera);
-	
-}
 
 int	on_destroy(t_data *data)
 {

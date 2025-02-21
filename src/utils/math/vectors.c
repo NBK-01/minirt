@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vectors.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/21 13:16:11 by mmuhaise          #+#    #+#             */
+/*   Updated: 2025/02/21 13:16:12 by mmuhaise         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../headers/math.h"
 
-u_result	vec_dot_cross(t_pos vec1, t_pos vec2, t_op op)
+t_result	vec_dot_cross(t_pos vec1, t_pos vec2, t_op op)
 {
-	t_pos	result;
-	u_result	res;
+	t_pos		result;
+	t_result	res;
 
-	res = (u_result){0};
+	res = (t_result){0};
 	if (op == DOT)
 	{
 		res.d = vec1.x * vec2.x + vec1.y * vec2.y + vec1.z * vec2.z;
@@ -46,8 +58,11 @@ t_pos	vec_normalize(t_pos vec)
 
 t_pos	vec_operation(t_pos vec1, t_pos vec2, t_op op)
 {
-	t_pos	result = {0,0,0};
+	t_pos	result;
 
+	result.x = 0;
+	result.y = 0;
+	result.z = 0;
 	if (op == ADD)
 	{
 		result.x = vec1.x + vec2.x;
