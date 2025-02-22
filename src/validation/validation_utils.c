@@ -41,32 +41,18 @@ bool	valid_args(int ac, char **av)
 	return (true);
 }
 
-double	ft_strtod(const char *str, char **endptr)
+double	parse_number(const char **str)
 {
 	double	result;
 	double	fraction;
-	int		sign;
 	int		seen_dot;
 
 	result = 0.0;
-	fraction = 1.0;
-	sign = 1;
 	seen_dot = 0;
-	if (str == NULL)
+	fraction = 1.0;
+	while (ft_isdigit(**str) || **str == '.')
 	{
-		if (endptr)
-			*endptr = (char *)str;
-		return (0.0);
-	}
-	if (*str == '-' || *str == '+')
-	{
-		if (*str == '-')
-			sign = -1;
-		str++;
-	}
-	while (ft_isdigit(*str) || *str == '.')
-	{
-		if (*str == '.')
+		if (**str == '.')
 		{
 			if (seen_dot)
 				break ;
@@ -76,43 +62,25 @@ double	ft_strtod(const char *str, char **endptr)
 		{
 			if (seen_dot)
 				fraction /= 10.0;
-			result = result * 10.0 + (*str - '0');
+			result = result * 10.0 + (**str - '0');
 		}
-		str++;
+		(*str)++;
 	}
-	if (endptr)
-		*endptr = (char *)str;
-	return (sign * result * fraction);
+	return (result * fraction);
 }
 
-long	ft_strtol(const char *str, char **endptr, int base)
+double	ft_strtod(const char *str, char **endptr)
 {
-	long	result;
+	double	result;
 	int		sign;
-	int		digit;
 
-	result = 0;
-	sign = 1;
-	if (str == NULL)
-	{
-		if (endptr)
-			*endptr = (char *)str;
-		return (0);
-	}
 	if (*str == '-' || *str == '+')
 	{
 		if (*str == '-')
 			sign = -1;
 		str++;
 	}
-	while (ft_isdigit(*str))
-	{
-		digit = *str - '0';
-		if (digit >= base)
-			break ;
-		result = result * base + digit;
-		str++;
-	}
+	result = parse_number(&str);
 	if (endptr)
 		*endptr = (char *)str;
 	return (sign * result);

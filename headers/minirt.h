@@ -16,7 +16,11 @@
 # include "main.h"
 
 
+bool	validate_sphere(char **split);
+bool	validate_plane(char **split);
+bool	validate_cylinder(char **split);
 int		close_window(int keycode, t_data *data);
+long	ft_strtol(const char *str, char **endptr, int base);
 void	parse_light(char **split, t_data *data);
 void	parse_camera(char **split, t_data *data);
 t_pos	parse_pos(char *split);

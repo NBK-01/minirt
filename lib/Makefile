@@ -15,7 +15,7 @@ CTYPE_SRC	= ft_isalpha ft_isalnum ft_isdigit ft_isprint ft_isspace ft_tolower ft
 
 LIST_SRC	= ft_lstadd_back ft_lstclear ft_lstiter ft_lstmap ft_lstsize ft_lstadd_front ft_lstdelone ft_lstlast ft_lstnew
 
-STDLIB_SRC	= ft_atoi ft_calloc
+STDLIB_SRC	= ft_atoi ft_calloc floats
 
 GNL_SRC	=  get_next_line
 

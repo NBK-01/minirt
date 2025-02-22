@@ -17,5 +17,6 @@
 int			ft_atoi(const char *str);
 __int128	ft_atoll(const char *str);
 void		*ft_calloc(size_t count, size_t size);
+long		ft_strtol(const char *str, char **endptr, int base);
 
 #endif
