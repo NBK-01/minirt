@@ -1,5 +1,4 @@
 #include "../../../headers/minirt.h"
-#include <stdbool.h>
 
 static bool	sphere_helper(int *i, char **split)
 {

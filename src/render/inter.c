@@ -13,18 +13,10 @@
 #include "../../headers/main.h"
 #include "../../headers/math.h"
 #include "../../headers/minirt.h"
-
-bool	intersection(t_ray ray, t_data *data, t_hit *hit, t_ident id, int i)
-{
-	if (id == SP)
-		return (intersect_sphere(ray, *data->objects->spheres[i], hit));
-	else if (id == PL)
-		return (intersect_plane(ray, *data->objects->planes[i], hit));
-	else if (id == CY)
-		return (intersect_cylinder(ray, *data->objects->cylinders[i], hit));
-	else
-		return (ft_putstr_fd("object does not exist", 2), 0);
-}
+#define CURVED 0        // Index for curved surface hits
+#define CAP1 1          // Index for bottom cap hits
+#define CAP2 2          // Index for top cap hits
+#define MIN 3           // Index for minimum valid hit
 
 bool	intersect_plane(t_ray ray, t_plane plane, t_hit *hit)
 {
@@ -70,86 +62,116 @@ bool	intersect_sphere(t_ray ray, t_sphere sphere, t_hit *hit)
 	return (true);
 }
 
+
+static t_quadratic	get_cylinder_quad(t_pos co, t_pos v, t_pos dir, t_cylinder cy)
+{
+    t_quadratic  q;
+    const double radius = cy.diameter / 2.0;
+    t_pos        a;
+    t_pos        b;
+
+    a = vec_operation(co, vec_scalar(v, vec_dot_cross(co, v, DOT).d, SUB);
+    b = vec_operation(dir, vec_scalar(v, vec_dot_cross(dir, v, DOT).d, SUB);
+    q.a = vec_dot_cross(b, b, DOT).d;
+    q.b = 2.0 * vec_dot_cross(a, b, DOT).d;
+    q.c = vec_dot_cross(a, a, DOT).d - (radius * radius);
+    return (q);
+}
+
+static double	check_curved_hit(t_solution s, t_cylinder cy, double dv, double Dv)
+{
+    double t;
+    double s_val;
+
+    t = INFINITY;
+    if (s.t0 > EPSILON)
+    {
+        s_val = dv + s.t0 * Dv;
+        if (s_val >= -cy.height/2 && s_val <= cy.height/2)
+            t = s.t0;
+    }
+    if (s.t1 > EPSILON && s.t1 < t)
+    {
+        s_val = dv + s.t1 * Dv;
+        if (s_val >= -cy.height/2 && s_val <= cy.height/2)
+            t = s.t1;
+    }
+    return (t);
+}
+
+static void	check_caps(t_ray ray, t_cylinder cy, double dv_Dv[2], double t_cap[2])
+{
+    const double h = cy.height;
+    t_pos        centers[2] = {
+        vec_operation(cy.pos, vec_scalar(cy.vec, -h/2, MULT), ADD),
+        vec_operation(cy.pos, vec_scalar(cy.vec, h/2, MULT), ADD)
+    };
+    double      t;
+    t_pos       p;
+
+    for (int i = 0; i < 2; i++)
+    {
+        t = (i * h - h/2 - dv_Dv[0]) / dv_Dv[1];
+        if (t <= EPSILON)
+            continue;
+        p = vec_operation(ray.origin, vec_scalar(ray.dir, t, MULT), ADD);
+        if (vec_dot_cross(vec_operation(p, centers[i], SUB), 
+            vec_operation(p, centers[i], SUB), DOT).d <= pow(cy.diameter/2, 2))
+            t_cap[i] = t;
+    }
+}
+
 bool	intersect_cylinder(t_ray ray, t_cylinder cy, t_hit *hit)
 {
-	t_pos V = cy.vec;
-	t_pos CO = vec_operation(ray.origin, cy.pos, SUB);
-	double radius = cy.diameter / 2.0;
-	double height = cy.height;
-	double dv = vec_dot_cross(CO, V, DOT).d;
-	double Dv = vec_dot_cross(ray.dir, V, DOT).d;
+    const t_pos  co = vec_operation(ray.origin, cy.pos, SUB);
+    const double dv = vec_dot_cross(co, cy.vec, DOT).d;
+    const double Dv = vec_dot_cross(ray.dir, cy.vec, DOT).d;
+    t_quadratic  q = get_cylinder_quad(co, cy.vec, ray.dir, cy);
+    t_solution   s = solve_quadratic(q.a, q.b, q.c);
+    double       t[3];
 
-	t_pos A = vec_operation(CO, vec_scalar(V, dv, MULT), SUB);
-	t_pos B = vec_operation(ray.dir, vec_scalar(V, Dv, MULT), SUB);
-	double a = vec_dot_cross(B, B, DOT).d;
-	double b = 2.0 * vec_dot_cross(A, B, DOT).d;
-	double c = vec_dot_cross(A, A, DOT).d - (radius * radius);
+    t[CURVED] = check_curved_hit(s, cy, dv, Dv);
+    t[CAP1] = INFINITY;
+    t[CAP2] = INFINITY;
+    check_caps(ray, cy, (double[2]){dv, Dv}, &t[CAP1]);
+    t[MIN] = fmin(fmin(t[CURVED], t[CAP1]), t[CAP2]);
+    if (t[MIN] >= INFINITY)
+        return (false);
+    hit->t = t[MIN];
+    hit->point = vec_operation(ray.origin, vec_scalar(ray.dir, t[MIN], MULT), ADD);
+    hit->normal = (t[MIN] == t[CURVED]) ? 
+        vec_normalize(vec_operation(hit->point, 
+            vec_operation(cy.pos, vec_scalar(cy.vec, dv + t[MIN]*Dv, MULT), ADD), SUB)) :
+        vec_normalize(vec_scalar(cy.vec, (t[MIN] == t[CAP1]) ? -1 : 1, MULT));
+    hit->color = cy.color;
+    return (true);
+}
 
-	double disc = b * b - 4 * a * c;
-	if (disc < EPSILON)
-		return (false);
+static bool	check_hit(t_data *data, t_hit temp_hit, t_hit *closest_hit, t_ray ray)
+{
+	int	i;
 
-	double sqrt_disc = sqrt(disc);
-	double t0 = (-b - sqrt_disc) / (2 * a);
-	double t1 = (-b + sqrt_disc) / (2 * a);
-
-	double t_curved = INFINITY;
-	if (t0 > EPSILON) {
-		double s = dv + t0 * Dv;
-		if (s >= -height / 2 && s <= height / 2)
-			t_curved = t0;
-	}
-	if (t1 > EPSILON && t1 < t_curved) {
-		double s = dv + t1 * Dv;
-		if (s >= -height / 2 && s <= height / 2)
-			t_curved = t1;
-	}
-
-	double t_cap = INFINITY;
-	t_pos normal_cap;
-	t_pos cap_center;
-
-	if (fabs(Dv) > EPSILON)
+	i = -1;
+	while (++i < data->cylinders_count)
 	{
-		double t_bottom = (-dv - height / 2) / Dv;
-		if (t_bottom > EPSILON) {
-			t_pos P = vec_operation(ray.origin, vec_scalar(ray.dir, t_bottom, MULT), ADD);
-			cap_center = vec_operation(cy.pos, vec_scalar(V, -height / 2, MULT), ADD);
-			t_pos P_to_center = vec_operation(P, cap_center, SUB);
-			if (vec_dot_cross(P_to_center, P_to_center, DOT).d <= radius * radius && t_bottom < t_cap) {
-				t_cap = t_bottom;
-				normal_cap = vec_scalar(V, -1.0, MULT);
-			}
-		}
-
-		double t_top = (height / 2 - dv) / Dv;
-		if (t_top > EPSILON) {
-			t_pos P = vec_operation(ray.origin, vec_scalar(ray.dir, t_top, MULT), ADD);
-			cap_center = vec_operation(cy.pos, vec_scalar(V, height / 2, MULT), ADD);
-			t_pos P_to_center = vec_operation(P, cap_center, SUB);
-			if (vec_dot_cross(P_to_center, P_to_center, DOT).d <= radius * radius && t_top < t_cap) {
-				t_cap = t_top;
-				normal_cap = V;
-			}
+		if (intersect_cylinder(ray, *data->objects->cylinders[i], &temp_hit)
+			&& temp_hit.t < closest_hit->t)
+		{
+			*closest_hit = temp_hit;
+			return (true);
 		}
 	}
-	double t_min = fmin(t_curved, t_cap);
-	if (t_min >= INFINITY)
-		return (false);
-
-	hit->t = t_min;
-	hit->point = vec_operation(ray.origin, vec_scalar(ray.dir, t_min, MULT), ADD);
-
-	if (t_min == t_curved) {
-		double s = dv + t_min * Dv;
-		t_pos C_proj = vec_operation(cy.pos, vec_scalar(V, s, MULT), ADD);
-		hit->normal = vec_normalize(vec_operation(hit->point, C_proj, SUB));
-	} else {
-		hit->normal = vec_normalize(normal_cap);
+	i = -1;
+	while (++i < data->planes_count)
+	{
+		if (intersect_plane(ray, *data->objects->planes[i], &temp_hit)
+			&& temp_hit.t < closest_hit->t)
+		{
+			*closest_hit = temp_hit;
+			return (true);
+		}
 	}
-
-	hit->color = cy.color;
-	return (true);
+	return (false);
 }
 
 int	find_closest_intersection(t_ray ray, t_data *data, t_hit *closest_hit)
@@ -163,32 +185,14 @@ int	find_closest_intersection(t_ray ray, t_data *data, t_hit *closest_hit)
 	i = -1;
 	while (++i < data->spheres_count)
 	{
-		if (intersection(ray, data, &temp_hit, SP, i)
+		if (intersect_sphere(ray, *data->objects->spheres[i], &temp_hit)
 			&& temp_hit.t < closest_hit->t)
 		{
 			*closest_hit = temp_hit;
 			hit_anything = 1;
 		}
 	}
-	i = -1;
-	while (++i < data->planes_count)
-	{
-		if (intersection(ray, data, &temp_hit, PL, i)
-			&& temp_hit.t < closest_hit->t)
-		{
-			*closest_hit = temp_hit;
-			hit_anything = 1;
-		}
-	}
-	i = -1;
-	while (++i < data->cylinders_count)
-	{
-		if (intersection(ray, data, &temp_hit, CY, i)
-			&& temp_hit.t < closest_hit->t)
-		{
-			*closest_hit = temp_hit;
-			hit_anything = 1;
-		}
-	}
+	if (check_hit(data, temp_hit, closest_hit, ray))
+		hit_anything = 1;
 	return (hit_anything);
 }

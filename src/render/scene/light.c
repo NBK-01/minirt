@@ -13,16 +13,6 @@
 #include "../../../headers/minirt.h"
 #include "../../../headers/main.h"
 #include "../../../headers/math.h"
-#define SHADOW_BIAS 0.001
-#define SHADOW_SAMPLES 10
-
-t_pos	normalize(t_pos v)
-{
-	float	len;
-
-	len = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-	return ((t_pos){v.x / len, v.y / len, v.z / len});
-}
 
 static bool	shadow_intersect(t_data	*data, t_hit *shadow_hit,
 		double light_distance, t_ray shadow_ray)
@@ -76,13 +66,15 @@ bool	trace_shadows(t_data *data, t_pos hit_point)
 }
 
 double	calc_specular(t_hit *hit, t_pos light_dir, t_ray *ray,
-		double dot_nl, t_data *data)
+			t_data *data)
 {
 	t_pos	reflect_dir;
 	t_pos	view_dir;
 	double	specular_factor;
 	double	specular_intensity;
+	double	dot_nl;
 
+	dot_nl = vec_dot_cross(hit->normal, light_dir, DOT).d;
 	reflect_dir = vec_operation(vec_scalar(hit->normal,
 				2.0 * dot_nl, MULT), light_dir, SUB);
 	view_dir = vec_operation(ray->origin, hit->point, SUB);
@@ -107,13 +99,6 @@ void	calc_diffusion(t_data *data, double dot_nl,
 	}
 }
 
-void	apply_ambient(t_color *final_color, t_hit *hit, double ratio)
-{
-	final_color->r = hit->color.r * ratio;
-	final_color->g = hit->color.g * ratio;
-	final_color->b = hit->color.b * ratio;
-}
-
 t_color	compute_lighting(t_data *data, t_hit *hit, t_ray *ray)
 {
 	t_color	final_color;
@@ -132,7 +117,7 @@ t_color	compute_lighting(t_data *data, t_hit *hit, t_ray *ray)
 	calc_diffusion(data, dot_nl, &final_color, hit);
 	if (hit->reflectivity > 0)
 	{
-		specular_intensity = calc_specular(hit, light_dir, ray, dot_nl, data);
+		specular_intensity = calc_specular(hit, light_dir, ray, data);
 		final_color.r += 255 * specular_intensity;
 		final_color.g += 255 * specular_intensity;
 		final_color.b += 255 * specular_intensity;

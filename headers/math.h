@@ -36,7 +36,8 @@ typedef struct s_quad
 	t_pos	oc;
 }	t_quad;
 
-typedef union u_result {
+typedef union u_result
+{
 	double	d;
 	t_pos	v;
 }	t_result;
@@ -63,5 +64,6 @@ t_pos		vec_normalize(t_pos vec);
 double		vec_angle(double angle, t_op op);
 
 t_pos		vec_operation(t_pos vec1, t_pos vec2, t_op op);
+t_pos		normalize(t_pos v);
 
 #endif // !VECTORS_H

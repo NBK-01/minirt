@@ -33,3 +33,11 @@ double	quadratic(double a, double b, double c)
 	}
 	return (0);
 }
+
+t_pos	normalize(t_pos v)
+{
+	float	len;
+
+	len = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+	return ((t_pos){v.x / len, v.y / len, v.z / len});
+}

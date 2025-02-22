@@ -1,6 +1,4 @@
-
 #include "../../../headers/minirt.h"
-#include <stdbool.h>
 
 static bool	cyl_helper(int *i, char **split)
 {

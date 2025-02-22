@@ -1,4 +1,3 @@
-
 #include "../../../headers/minirt.h"
 
 static bool	plane_helper(int *i, char **split)
@@ -32,7 +31,7 @@ bool	validate_plane(char **split)
 	while (split[++i])
 		if (!plane_helper(&i, split))
 			return (false);
-	if (i != 3 && trim_size)
+	if (trim_size)
 		return (exit_err("Error: invalid plane config\n", NULL));
 	return (true);
 }

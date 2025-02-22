@@ -29,14 +29,6 @@ int	color_to_int(t_color color)
 	return ((color.r << 16) | (color.g << 8) | color.b);
 }
 
-t_color	apply_gamma_correction(t_color color)
-{
-	color.r = pow(color.r / 255.0, 1 / 2.2) * 255;
-	color.g = pow(color.g / 255.0, 1 / 2.2) * 255;
-	color.b = pow(color.b / 255.0, 1 / 2.2) * 255;
-	return (clamp_color(color));
-}
-
 void	color_add(t_color *color, t_color other)
 {
 	color->r += other.r;
@@ -49,4 +41,11 @@ void	color_scalar_div(t_color *color, int scalar)
 	color->r /= scalar;
 	color->g /= scalar;
 	color->b /= scalar;
+}
+
+void	apply_ambient(t_color *final_color, t_hit *hit, double ratio)
+{
+	final_color->r = hit->color.r * ratio;
+	final_color->g = hit->color.g * ratio;
+	final_color->b = hit->color.b * ratio;
 }

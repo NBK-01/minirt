@@ -43,6 +43,10 @@
 # define WIDTH		1280
 # define HEIGHT		700
 # define EPSILON	1e-2
+# define SHADOW_BIAS 0.001
+# define SHADOW_SAMPLES 10
+
+
 
 typedef enum e_ident
 {
@@ -101,7 +105,8 @@ typedef struct s_light
 	t_color	color;
 }	t_light;
 
-typedef struct s_mlx {
+typedef struct s_mlx
+{
 	void	*mlx;
 	void	*window;
 	void	*img;
@@ -156,7 +161,8 @@ typedef struct s_cylinder
 	t_color	color;
 }	t_cylinder;
 
-typedef struct s_hit {
+typedef struct s_hit
+{
 	double		t;
 	t_pos		point;
 	t_pos		normal;
