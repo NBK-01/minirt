@@ -42,7 +42,7 @@
 
 # define WIDTH		1280
 # define HEIGHT		700
-# define EPSILON	1e-2
+# define EPSILON	1e-4
 # define SHADOW_BIAS 0.001
 # define SHADOW_SAMPLES 10
 
@@ -172,6 +172,7 @@ typedef struct s_hit
 	t_pos		normal;
 	t_color		color;
 	double		reflectivity;
+	int			hit;
 }	t_hit;
 
 typedef struct s_objects

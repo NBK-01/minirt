@@ -69,8 +69,8 @@ bool	intersect_cylinder(t_ray ray, t_cylinder cy, t_hit *hit)
 	return (true);
 }
 
-static bool	check_hit(t_data *data, t_hit temp_hit,
-				t_hit *closest_hit, t_ray ray)
+static void	check_hit(t_data *data, t_hit temp_hit,
+				t_hit **closest_hit, t_ray ray)
 {
 	int	i;
 
@@ -78,33 +78,31 @@ static bool	check_hit(t_data *data, t_hit temp_hit,
 	while (++i < data->cylinders_count)
 	{
 		if (intersect_cylinder(ray, *data->objects->cylinders[i], &temp_hit)
-			&& temp_hit.t < closest_hit->t)
+			&& temp_hit.t < (*closest_hit)->t)
 		{
-			*closest_hit = temp_hit;
-			return (true);
+			**closest_hit = temp_hit;
+			(*closest_hit)->hit = 1;
 		}
 	}
 	i = -1;
 	while (++i < data->planes_count)
 	{
 		if (intersect_plane(ray, *data->objects->planes[i], &temp_hit)
-			&& temp_hit.t < closest_hit->t)
+			&& temp_hit.t < (*closest_hit)->t)
 		{
-			*closest_hit = temp_hit;
-			return (true);
+			**closest_hit = temp_hit;
+			(*closest_hit)->hit = 1;
 		}
 	}
-	return (false);
 }
 
 int	find_closest_intersection(t_ray ray, t_data *data, t_hit *closest_hit)
 {
 	t_hit	temp_hit;
-	int		hit_anything;
 	int		i;
 
 	closest_hit->t = INFINITY;
-	hit_anything = 0;
+	closest_hit->hit = 0;
 	i = -1;
 	while (++i < data->spheres_count)
 	{
@@ -112,10 +110,9 @@ int	find_closest_intersection(t_ray ray, t_data *data, t_hit *closest_hit)
 			&& temp_hit.t < closest_hit->t)
 		{
 			*closest_hit = temp_hit;
-			hit_anything = 1;
+			closest_hit->hit = 1;
 		}
 	}
-	if (check_hit(data, temp_hit, closest_hit, ray))
-		hit_anything = 1;
-	return (hit_anything);
+	check_hit(data, temp_hit, &closest_hit, ray);
+	return (closest_hit->hit);
 }
