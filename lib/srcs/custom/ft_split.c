@@ -12,7 +12,6 @@
 
 #include "../../includes/libft.h"
 
-
 int	ft_is_sep(char x, const char *separators)
 {
 	while (*separators)
@@ -25,7 +24,6 @@ int	ft_is_sep(char x, const char *separators)
 		return (1);
 	return (0);
 }
-
 
 int	ft_word_count(char const *str, const char *separators)
 {
@@ -49,7 +47,7 @@ void	ft_print(char *dest, char const *src, const char *separators)
 	int	i;
 
 	i = 0;
-	while (!(ft_is_sep(src[i], separators)))  // Now using separators string
+	while (!(ft_is_sep(src[i], separators)))
 	{
 		dest[i] = src[i];
 		i++;
@@ -81,7 +79,6 @@ void	ft_print_split(char **res, char const *str, const char *separators)
 		}
 	}
 }
-
 
 char	**ft_split(char const *s, const char *separators)
 {

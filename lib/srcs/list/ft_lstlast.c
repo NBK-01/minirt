@@ -23,4 +23,3 @@ t_list	*ft_lstlast(t_list *lst)
 		temp = temp->next;
 	return (temp);
 }
-

@@ -46,8 +46,6 @@
 # define SHADOW_BIAS 0.001
 # define SHADOW_SAMPLES 10
 
-
-
 typedef enum e_ident
 {
 	SP,
