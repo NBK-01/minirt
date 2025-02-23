@@ -161,6 +161,12 @@ typedef struct s_cylinder
 	t_color	color;
 }	t_cylinder;
 
+typedef struct s_cap
+{
+	double	cap;
+	t_pos	normal_cap;
+}	t_cap;
+
 typedef struct s_hit
 {
 	double		t;

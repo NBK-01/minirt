@@ -16,6 +16,7 @@
 # include "main.h"
 
 bool	validate_sphere(char **split);
+void	set_hit_info(t_hit *hit, t_ray ray, t_cylinder cy, double d[2]);
 bool	validate_plane(char **split);
 bool	validate_cylinder(char **split);
 int		close_window(int keycode, t_data *data);

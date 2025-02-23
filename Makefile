@@ -17,7 +17,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -fPIE -g
 
 SRCS = main init/parse utils/utils utils/math/vectors render/scene/scene render/scene/colors render/scene/light \
-		render/scene/rays render/inter utils/math/helpers validation/validation_utils validation/object_validation validation/checkers \
+		render/scene/rays render/inter render/inter_cyl utils/math/helpers validation/validation_utils validation/object_validation validation/checkers \
 		validation/acl_validation mlx/mlx init/elems init/objects utils/mem validation/objects/cyl validation/objects/plane \
 		validation/objects/sphere
 
