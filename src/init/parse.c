@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nkanaan <nkanaan@student.42beirut.com>     +#+  +:+       +#+        */
+/*   By: nkanaan <nkanaan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:30:56 by mmuhaise          #+#    #+#             */
-/*   Updated: 2025/02/23 19:26:12 by nkanaan          ###   ########.fr       */
+/*   Updated: 2025/02/24 11:43:36 by nkanaan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/main.h"
 #include "../../headers/math.h"
 #include "../../headers/minirt.h"
+#include <stdio.h>
 
 void	parse_line(char **split, t_data *data)
 {
@@ -44,6 +45,32 @@ void	init_data(t_data *data)
 	}
 }
 
+static void	alloc_containers(t_list	**file, t_data	*data)
+{
+	char	**split;
+	t_list	*tmp;
+
+	tmp = (*file);
+	while (tmp)
+	{
+		split = ft_split(tmp->content, " \t");
+		if (!ft_strcmp(split[0], "sp"))
+			data->spheres_count++;
+		if (!ft_strcmp(split[0], "pl"))
+			data->planes_count++;
+		if (!ft_strcmp(split[0], "cy"))
+			data->cylinders_count++;
+		free_split(split);
+		tmp = tmp->next;
+	}
+	data->objects->spheres = malloc(data->spheres_count * sizeof(t_sphere ));
+	data->objects->planes = malloc(data->planes_count * sizeof(t_plane ));
+	data->objects->cylinders = malloc(data->spheres_count * sizeof(t_cylinder ));
+	data->spheres_count = 0;
+	data->planes_count = 0;
+	data->cylinders_count = 0;
+}
+
 bool	parse_file(t_list **file, t_data *data)
 {
 	t_list	*tmp;
@@ -51,9 +78,7 @@ bool	parse_file(t_list **file, t_data *data)
 
 	tmp = (*file);
 	init_data(data);
-	data->objects->spheres = ft_calloc(100, sizeof(t_sphere *));
-	data->objects->planes = ft_calloc(100, sizeof(t_plane *));
-	data->objects->cylinders = ft_calloc(100, sizeof(t_plane *));
+	alloc_containers(file, data);
 	while (tmp)
 	{
 		split = ft_split(tmp->content, " \t");

@@ -74,6 +74,7 @@ double	ft_strtod(const char *str, char **endptr)
 	double	result;
 	int		sign;
 
+	sign = 1;
 	if (*str == '-' || *str == '+')
 	{
 		if (*str == '-')

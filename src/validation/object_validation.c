@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object_validation.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
+/*   By: nkanaan <nkanaan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 23:51:31 by mmuhaise          #+#    #+#             */
-/*   Updated: 2025/02/22 00:14:41 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2025/02/24 11:40:28 by nkanaan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ static bool	valid_elem_helper(char **split, bool *has_ambient, bool *has_light,
 				bool *has_camera)
 {
 	if (!check_config(split[0]))
-		return (ft_putstr_fd(RED "Error: unkown configs\n" RESET, 2), false);
+		return (free_split(split),
+			ft_putstr_fd(RED "Error: unkown configs\n" RESET, 2), false);
 	if (split[0] && (!ft_strcmp(split[0], "A") || !ft_strcmp(split[0], "C")
 			|| !ft_strcmp(split[0], "L") || !ft_strcmp(split[0], "A\n")
 			|| !ft_strcmp(split[0], "C\n") || !ft_strcmp(split[0], "L\n")))
@@ -88,7 +89,7 @@ bool	validate_file(t_list **file)
 	{
 		split = ft_split(tmp->content, " \t");
 		if (!valid_elem_helper(split, &has_ambient, &has_light, &has_camera))
-			return (ft_lstclear(file), free_split(split), false);
+			return (ft_lstclear(file), false);
 		if (!validate_objects(split))
 			return (ft_lstclear(file), false);
 		free_split(split);

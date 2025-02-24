@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
+/*   By: nkanaan <nkanaan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:31:04 by mmuhaise          #+#    #+#             */
-/*   Updated: 2025/02/21 13:20:54 by mmuhaise         ###   ########.fr       */
+/*   Updated: 2025/02/24 13:47:39 by nkanaan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@
 
 # define WIDTH		1280
 # define HEIGHT		700
-# define EPSILON	1e-4
+# define EPSILON	1e-5
 # define SHADOW_BIAS 0.001
 # define SHADOW_SAMPLES 10
 

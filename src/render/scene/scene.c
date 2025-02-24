@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   scene.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nkanaan <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: nkanaan <nkanaan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/21 15:43:22 by nkanaan           #+#    #+#             */
-/*   Updated: 2025/02/21 15:43:23 by nkanaan          ###   ########.fr       */
+/*   Updated: 2025/02/24 13:43:01 by nkanaan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,6 @@
 
 #define AA_SAMPLES	16
 
-/*void print_progress(int current, int total)*/
-/*{*/
-/*	int bar_width = 50;*/
-/*	float progress = (float)current / total;*/
-/*	int pos = (int)(bar_width * progress);*/
-/**/
-/*	printf("\r[");*/
-/*	for (int i = 0; i < bar_width; i++)*/
-/*	{*/
-/*		if (i < pos)*/
-/*			printf("=");*/
-/*		else if (i == pos)*/
-/*			printf(">");*/
-/*		else*/
-/*			printf(" ");*/
-/*	}*/
-/*	printf("] %d%%", (int)(progress * 100));*/
-/*	fflush(stdout);*/
-/*}*/
-/**/
 t_color	compute_aa_pixel(t_data *data, double x, double y)
 {
 	t_color	final_color;
