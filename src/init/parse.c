@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nkanaan <nkanaan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 12:30:56 by mmuhaise          #+#    #+#             */
-/*   Updated: 2025/02/24 11:43:36 by nkanaan          ###   ########.fr       */
+/*   Updated: 2025/02/27 14:30:41 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,9 @@ static void	alloc_containers(t_list	**file, t_data	*data)
 		free_split(split);
 		tmp = tmp->next;
 	}
-	data->objects->spheres = malloc(data->spheres_count * sizeof(t_sphere ));
-	data->objects->planes = malloc(data->planes_count * sizeof(t_plane ));
-	data->objects->cylinders = malloc(data->spheres_count * sizeof(t_cylinder ));
+	data->objects->spheres = malloc(data->spheres_count * sizeof(t_sphere));
+	data->objects->planes = malloc(data->planes_count * sizeof(t_plane));
+	data->objects->cylinders = malloc(data->spheres_count * sizeof(t_cylinder));
 	data->spheres_count = 0;
 	data->planes_count = 0;
 	data->cylinders_count = 0;

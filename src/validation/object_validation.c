@@ -3,36 +3,59 @@
 /*                                                        :::      ::::::::   */
 /*   object_validation.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nkanaan <nkanaan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mmuhaise <mmuhaise@student.42beirut.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 23:51:31 by mmuhaise          #+#    #+#             */
-/*   Updated: 2025/02/24 11:40:28 by nkanaan          ###   ########.fr       */
+/*   Updated: 2025/02/27 14:17:27 by mmuhaise         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minirt.h"
+
+static bool	validate_c_and_l(char **split, bool *has_camera, bool *has_light)
+{
+	if (!ft_strcmp(split[0], "C") || !ft_strcmp(split[0], "C\n"))
+	{
+		if (!(*has_camera))
+		{
+			*has_camera = true;
+			if (!validate_camera(split))
+				return (free_split(split), false);
+		}
+		else
+			return (exit_err("DUPLICATE FOUND!\n", split));
+	}
+	if (!ft_strcmp(split[0], "L") || !ft_strcmp(split[0], "L\n"))
+	{
+		if (!(*has_light))
+		{
+			*has_light = true;
+			if (!validate_light(split))
+				return (free_split(split), false);
+		}
+		else
+			return (exit_err("DUPLICATE FOUND!\n", split));
+	}
+	return (true);
+}
 
 static bool	validate_elems(char **split, bool *has_ambient, bool *has_light,
 				bool *has_camera)
 {
 	if (!ft_strcmp(split[0], "A") || !ft_strcmp(split[0], "A\n"))
 	{
-		*has_ambient = true;
-		if (!validate_ambient(split))
-			return (free_split(split), false);
+		if (!(*has_ambient))
+		{
+			*has_ambient = true;
+			if (!validate_ambient(split))
+				return (free_split(split), false);
+		}
+		else
+			return (exit_err("DUPLICATE FOUND!\n", split));
 	}
-	if (!ft_strcmp(split[0], "C") || !ft_strcmp(split[0], "C\n"))
-	{
-		*has_camera = true;
-		if (!validate_camera(split))
-			return (free_split(split), false);
-	}
-	if (!ft_strcmp(split[0], "L") || !ft_strcmp(split[0], "L\n"))
-	{
-		*has_light = true;
-		if (!validate_light(split))
-			return (free_split(split), false);
-	}
+	if ((!ft_strcmp(split[0], "C") || !ft_strcmp(split[0], "C\n"))
+		|| (!ft_strcmp(split[0], "L") || !ft_strcmp(split[0], "L\n")))
+		return (validate_c_and_l(split, has_camera, has_light));
 	return (true);
 }
 
